@@ -1,0 +1,23 @@
+{
+  "name": "node-docker-delta",
+  "version": "1.0.0",
+  "description": "Generate binary filesystem diffs between docker images to speed up distribution",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Petros Angelatos",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "coffee-script": "^1.10.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "dockerode": "^2.2.10",
+    "event-stream": "^3.3.2",
+    "readable-stream": "^2.1.2",
+    "semver": "^5.1.0",
+    "tar-stream": "^1.5.2",
+    "tmp": "0.0.28"
+  }
+}
