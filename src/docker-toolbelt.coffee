@@ -32,7 +32,7 @@ createChainId = (diffIds) ->
 createChainIdFromParent = (parent, dgsts) ->
 	if dgsts.length is 0
 		return parent
-	
+
 	if parent is ''
 		return createChainIdFromParent(dgsts[0], dgsts[1..])
 
@@ -101,7 +101,7 @@ Docker::createEmptyImage = (imageConfig) ->
 	layer = tar.pack()
 	layer.entry(name: 'seed', String(Date.now() + Math.random()))
 	layer.finalize()
-	
+
 	Promise.fromCallback (callback) ->
 		layer.pipe(es.wait(callback))
 	.then (buf) =>
@@ -120,7 +120,7 @@ Docker::createEmptyImage = (imageConfig) ->
 			id: imageId
 			created: now
 			config: imageConfig
-		
+
 		image = tar.pack()
 		image.entry(name: 'manifest.json', JSON.stringify(manifest))
 		image.entry(name: 'config.json', JSON.stringify(config))
