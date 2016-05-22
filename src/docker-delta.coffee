@@ -141,7 +141,7 @@ exports.applyDelta = (srcImage, dstImage) ->
 				throw e
 		.then ->
 			deltaStream.emit('id', dstId)
-	
+
 	return deltaStream
 
 from = 'busybox:musl'

@@ -40,7 +40,7 @@ exports.createRsyncStream = (src, dest) ->
 				if code isnt 0
 					console.error('rsync error', error)
 					ps.stdout.emit('error', new Error("rsync exited. code: #{code} signal: #{signal}"))
-			
+
 			ps.stderr.pipe(process.stderr)
 			ps.stdout.pipe(process.stdout)
 

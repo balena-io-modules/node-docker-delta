@@ -20,6 +20,7 @@
 #	digest-algorithm-component      := /[A-Za-z][A-Za-z0-9]*/
 #	digest-hex                      := /[0-9a-fA-F]{32,}/ ; At least 128 bit digest value
 
+###
 errors = require 'errors'
 
 #	"github.com/docker/distribution/digest"
@@ -319,3 +320,4 @@ func (c canonicalReference) Name() string {
 func (c canonicalReference) Digest() digest.Digest {
 	return c.digest
 
+###
