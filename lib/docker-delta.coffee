@@ -18,7 +18,7 @@ docker = new Docker()
 # The stream format is the following where || means concatenation:
 #
 # result := jsonMetadata || 0x00 || rsyncData
-exports.createDelta = (srcImage, destImage) ->
+exports.createDelta = (srcImage, destImage, v2=true) ->
 	# We need a passthrough stream so that we can return it immediately while the
 	# promises are in progress
 	deltaStream = new stream.PassThrough()
@@ -38,14 +38,15 @@ exports.createDelta = (srcImage, destImage) ->
 
 	Promise.all [ config, rsyncStream ]
 	.spread (config, rsyncStream) ->
-		metadata =
-			version: 2
-			dockerConfig: config
+		if v2
+			metadata =
+				version: 2
+				dockerConfig: config
 
-		# Write the header of the delta format which is the serialised metadata
-		deltaStream.write(JSON.stringify(metadata))
-		# Write the NUL byte separator for the rsync binary stream
-		deltaStream.write(Buffer.from([ 0x00 ]))
+			# Write the header of the delta format which is the serialised metadata
+			deltaStream.write(JSON.stringify(metadata))
+			# Write the NUL byte separator for the rsync binary stream
+			deltaStream.write(Buffer.from([ 0x00 ]))
 		# Write the rsync binary stream
 		rsyncStream.pipe(deltaStream)
 	.catch (e) ->
