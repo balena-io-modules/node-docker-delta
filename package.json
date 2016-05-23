@@ -2,7 +2,7 @@
   "name": "docker-delta",
   "version": "1.0.0",
   "description": "Generate binary filesystem diffs between docker images to speed up distribution",
-  "main": "index.js",
+  "main": "lib/docker-delta.coffee",
   "scripts": {
     "lint": "resin-lint lib",
     "test": "npm run lint"
