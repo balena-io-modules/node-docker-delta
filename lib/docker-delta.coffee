@@ -93,20 +93,27 @@ parseDeltaStream = (input) ->
 
 		input.on('readable', parser)
 
-exports.applyDelta = (srcImage, dstImage) ->
+exports.applyDelta = (srcImage) ->
 	deltaStream = new stream.PassThrough()
+
+	if srcImage?
+		srcRoot = docker.imageRootDir(srcImage)
+		.then (srcRoot) ->
+			# trailing slashes are significant for rsync
+			srcRoot = path.join(srcRoot, '/')
+	else
+		srcRoot = null
 
 	dstId = parseDeltaStream(deltaStream).get('dockerConfig').bind(docker).then(docker.createEmptyImage)
 
 	Promise.all [
 		docker.infoAsync().get('Driver')
-		docker.imageRootDir(srcImage)
+		srcRoot
 		dstId
 		dstId.then(docker.imageRootDir)
 	]
 	.spread (dockerDriver, srcRoot, dstId, dstRoot) ->
 		# trailing slashes are significant for rsync
-		srcRoot = path.join(srcRoot, '/')
 		dstRoot = path.join(dstRoot, '/')
 
 		rsyncArgs = [
@@ -120,11 +127,13 @@ exports.applyDelta = (srcImage, dstImage) ->
 		Promise.attempt ->
 			switch dockerDriver
 				when 'btrfs'
-					btrfs.deleteSubvolAsync(dstRoot)
-					.then ->
-						btrfs.snapshotSubvolAsync(srcRoot, dstRoot)
+					if srcRoot?
+						btrfs.deleteSubvolAsync(dstRoot)
+						.then ->
+							btrfs.snapshotSubvolAsync(srcRoot, dstRoot)
 				when 'overlay'
-					rsyncArgs.push('--link-dest', srcRoot)
+					if srcRoot?
+						rsyncArgs.push('--link-dest', srcRoot)
 				else
 					throw new Error("Unsupported driver #{dockerDriver}")
 		.then ->
