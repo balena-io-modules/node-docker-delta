@@ -143,16 +143,3 @@ exports.applyDelta = (srcImage, dstImage) ->
 			deltaStream.emit('id', dstId)
 
 	return deltaStream
-
-from = 'busybox:musl'
-to = 'busybox:glibc'
-
-fs = require 'fs'
-
-# Delta creation
-exports.createDelta(from, to).pipe(fs.createWriteStream('test'))
-
-# Delta application
-# fs.createReadStream('test').pipe(exports.applyDelta(from)).once('id', (id) ->
-# 	console.log('Created image', id)
-# )
