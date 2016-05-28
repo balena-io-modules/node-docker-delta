@@ -83,7 +83,10 @@ parseDeltaStream = (input) ->
 				input.unshift(buf[sep + 1...])
 
 				# Parse JSON up until the separator
-				metadata = JSON.parse(buf[...sep])
+				try
+					metadata = JSON.parse(buf[...sep])
+				catch e
+					return reject(e)
 
 				# Sanity check
 				if metadata.version is 2
