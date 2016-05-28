@@ -10,6 +10,9 @@ exports.waitPidAsync = (ps) ->
 		.on('error', reject)
 		.on 'exit', (code, signal) ->
 			if code isnt 0
-				reject(new Error("rsync exited. code: #{code} signal: #{signal}"))
+				error = new Error("rsync exited. code: #{code} signal: #{signal}")
+				error.code = code
+				error.signal = signal
+				reject(error)
 			else
 				resolve()

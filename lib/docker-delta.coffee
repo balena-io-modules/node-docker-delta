@@ -11,6 +11,8 @@ Docker = require './docker-toolbelt'
 
 docker = new Docker()
 
+DELTA_OUT_OF_SYNC_CODES = [23, 24]
+
 # Takes two strings `srcImage` and `destImage` which represent docker images
 # that are already present in the docker daemon and returns a Readable stream
 # of the binary diff between the two images.
@@ -148,8 +150,8 @@ exports.applyDelta = (srcImage) ->
 			# rsync doesn't fsync by itself
 			utils.waitPidAsync(spawn('sync'))
 		.catch (e) ->
-			if code in DELTA_OUT_OF_SYNC_CODES
-				throw new OutOfSyncError('Incompatible image')
+			if e?.code in DELTA_OUT_OF_SYNC_CODES
+				throw new Error('Incompatible image')
 			else
 				throw e
 		.then ->
