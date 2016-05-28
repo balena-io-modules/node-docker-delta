@@ -65,8 +65,8 @@ parseDeltaStream = (input) ->
 		parser = ->
 			# Read all available data
 			chunks = [ buf ]
-			while input._readableState.length > 0
-				chunks.push(input.read())
+			while chunk = input.read()
+				chunks.push(chunk)
 
 			# FIXME: Implement a sensible upper bound on the size of metadata
 			# and reject with an error if we get above that
