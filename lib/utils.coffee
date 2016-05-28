@@ -5,8 +5,6 @@ constants = require 'constants'
 # Similar to waitpid(), it gets an instance of ChildProcess and returns a
 # promise that settles after the process has stopped or errored
 exports.waitPidAsync = (ps) ->
-	# ps.stdout.pipe(process.stderr)
-	# ps.stderr.pipe(process.stderr)
 	new Promise (resolve, reject) ->
 		ps
 		.on('error', reject)
