@@ -18,7 +18,7 @@ docker = new Docker()
 # The stream format is the following where || means concatenation:
 #
 # result := jsonMetadata || 0x00 || rsyncData
-exports.createDelta = (srcImage, destImage, v2=true) ->
+exports.createDelta = (srcImage, destImage, v2 = true) ->
 	# We need a passthrough stream so that we can return it immediately while the
 	# promises are in progress
 	deltaStream = new stream.PassThrough()
