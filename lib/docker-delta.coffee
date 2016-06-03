@@ -48,13 +48,18 @@ exports.createDelta = (srcImage, destImage, v2 = true) ->
 			# Write the header of the delta format which is the serialised metadata
 			deltaStream.write(JSON.stringify(metadata))
 			# Write the NUL byte separator for the rsync binary stream
-			deltaStream.write(Buffer.from([ 0x00 ]))
+			deltaStream.write(new Buffer([ 0x00 ]))
 		# Write the rsync binary stream
 		rsyncStream.pipe(deltaStream)
 	.catch (e) ->
 		deltaStream.emit('error', e)
 
 	return deltaStream
+
+bufIndexOfByte = (buf, byte) ->
+	for b, i in buf when b is byte
+		return i
+	return -1
 
 # Parses the input stream `input` and returns a promise that will resolve to
 # the parsed JSON metadata of the delta stream. The input stream is consumed
@@ -74,7 +79,7 @@ parseDeltaStream = (input) ->
 			# and reject with an error if we get above that
 			buf = Buffer.concat(chunks)
 
-			sep = buf.indexOf(0x00)
+			sep = bufIndexOfByte(0x00)
 
 			if sep isnt -1
 				# We no longer have to parse the input
