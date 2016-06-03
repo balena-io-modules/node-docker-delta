@@ -3,6 +3,7 @@ path = require 'path'
 
 Promise = require 'bluebird'
 stream = require 'readable-stream'
+TypedError = require 'typed-error'
 
 rsync = require './rsync'
 btrfs = require './btrfs'
@@ -12,6 +13,8 @@ Docker = require './docker-toolbelt'
 docker = new Docker()
 
 DELTA_OUT_OF_SYNC_CODES = [23, 24]
+
+exports.OutOfSyncError = class OutOfSyncError extends TypedError
 
 # Takes two strings `srcImage` and `destImage` which represent docker images
 # that are already present in the docker daemon and returns a Readable stream
@@ -156,7 +159,7 @@ exports.applyDelta = (srcImage) ->
 			utils.waitPidAsync(spawn('sync'))
 		.catch (e) ->
 			if e?.code in DELTA_OUT_OF_SYNC_CODES
-				throw new Error('Incompatible image')
+				throw OutOfSyncError('Incompatible image')
 			else
 				throw e
 		.then ->
