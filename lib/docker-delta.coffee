@@ -3,6 +3,7 @@ path = require 'path'
 
 Promise = require 'bluebird'
 stream = require 'readable-stream'
+TypedError = require 'typed-error'
 
 rsync = require './rsync'
 btrfs = require './btrfs'
@@ -11,6 +12,10 @@ Docker = require './docker-toolbelt'
 
 docker = new Docker()
 
+DELTA_OUT_OF_SYNC_CODES = [23, 24]
+
+exports.OutOfSyncError = class OutOfSyncError extends TypedError
+
 # Takes two strings `srcImage` and `destImage` which represent docker images
 # that are already present in the docker daemon and returns a Readable stream
 # of the binary diff between the two images.
@@ -18,7 +23,7 @@ docker = new Docker()
 # The stream format is the following where || means concatenation:
 #
 # result := jsonMetadata || 0x00 || rsyncData
-exports.createDelta = (srcImage, destImage, v2=true) ->
+exports.createDelta = (srcImage, destImage, v2 = true) ->
 	# We need a passthrough stream so that we can return it immediately while the
 	# promises are in progress
 	deltaStream = new stream.PassThrough()
@@ -46,13 +51,18 @@ exports.createDelta = (srcImage, destImage, v2=true) ->
 			# Write the header of the delta format which is the serialised metadata
 			deltaStream.write(JSON.stringify(metadata))
 			# Write the NUL byte separator for the rsync binary stream
-			deltaStream.write(Buffer.from([ 0x00 ]))
+			deltaStream.write(new Buffer([ 0x00 ]))
 		# Write the rsync binary stream
 		rsyncStream.pipe(deltaStream)
 	.catch (e) ->
 		deltaStream.emit('error', e)
 
 	return deltaStream
+
+bufIndexOfByte = (buf, byte) ->
+	for b, i in buf when b is byte
+		return i
+	return -1
 
 # Parses the input stream `input` and returns a promise that will resolve to
 # the parsed JSON metadata of the delta stream. The input stream is consumed
@@ -65,14 +75,14 @@ parseDeltaStream = (input) ->
 		parser = ->
 			# Read all available data
 			chunks = [ buf ]
-			while input._readableState.length > 0
-				chunks.push(input.read())
+			while chunk = input.read()
+				chunks.push(chunk)
 
 			# FIXME: Implement a sensible upper bound on the size of metadata
 			# and reject with an error if we get above that
 			buf = Buffer.concat(chunks)
 
-			sep = buf.indexOf(0x00)
+			sep = bufIndexOfByte(0x00)
 
 			if sep isnt -1
 				# We no longer have to parse the input
@@ -83,7 +93,10 @@ parseDeltaStream = (input) ->
 				input.unshift(buf[sep + 1...])
 
 				# Parse JSON up until the separator
-				metadata = JSON.parse(buf[...sep])
+				try
+					metadata = JSON.parse(buf[...sep])
+				catch e
+					return reject(e)
 
 				# Sanity check
 				if metadata.version is 2
@@ -93,20 +106,27 @@ parseDeltaStream = (input) ->
 
 		input.on('readable', parser)
 
-exports.applyDelta = (srcImage, dstImage) ->
+exports.applyDelta = (srcImage) ->
 	deltaStream = new stream.PassThrough()
+
+	if srcImage?
+		srcRoot = docker.imageRootDir(srcImage)
+		.then (srcRoot) ->
+			# trailing slashes are significant for rsync
+			srcRoot = path.join(srcRoot, '/')
+	else
+		srcRoot = null
 
 	dstId = parseDeltaStream(deltaStream).get('dockerConfig').bind(docker).then(docker.createEmptyImage)
 
 	Promise.all [
 		docker.infoAsync().get('Driver')
-		docker.imageRootDir(srcImage)
+		srcRoot
 		dstId
 		dstId.then(docker.imageRootDir)
 	]
 	.spread (dockerDriver, srcRoot, dstId, dstRoot) ->
 		# trailing slashes are significant for rsync
-		srcRoot = path.join(srcRoot, '/')
 		dstRoot = path.join(dstRoot, '/')
 
 		rsyncArgs = [
@@ -120,11 +140,13 @@ exports.applyDelta = (srcImage, dstImage) ->
 		Promise.attempt ->
 			switch dockerDriver
 				when 'btrfs'
-					btrfs.deleteSubvolAsync(dstRoot)
-					.then ->
-						btrfs.snapshotSubvolAsync(srcRoot, dstRoot)
+					if srcRoot?
+						btrfs.deleteSubvolAsync(dstRoot)
+						.then ->
+							btrfs.snapshotSubvolAsync(srcRoot, dstRoot)
 				when 'overlay'
-					rsyncArgs.push('--link-dest', srcRoot)
+					if srcRoot?
+						rsyncArgs.push('--link-dest', srcRoot)
 				else
 					throw new Error("Unsupported driver #{dockerDriver}")
 		.then ->
@@ -136,8 +158,8 @@ exports.applyDelta = (srcImage, dstImage) ->
 			# rsync doesn't fsync by itself
 			utils.waitPidAsync(spawn('sync'))
 		.catch (e) ->
-			if code in DELTA_OUT_OF_SYNC_CODES
-				throw new OutOfSyncError('Incompatible image')
+			if e?.code in DELTA_OUT_OF_SYNC_CODES
+				throw OutOfSyncError('Incompatible image')
 			else
 				throw e
 		.then ->
