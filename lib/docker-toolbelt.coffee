@@ -5,6 +5,7 @@ Docker = require 'dockerode'
 semver = require 'semver'
 tar = require 'tar-stream'
 es = require 'event-stream'
+fs = Promise.promisifyAll(require('fs'))
 path = require 'path'
 
 Promise.promisifyAll(Docker.prototype)
