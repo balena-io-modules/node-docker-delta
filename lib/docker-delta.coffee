@@ -82,7 +82,7 @@ parseDeltaStream = (input) ->
 			# and reject with an error if we get above that
 			buf = Buffer.concat(chunks)
 
-			sep = bufIndexOfByte(0x00)
+			sep = bufIndexOfByte(buf, 0x00)
 
 			if sep isnt -1
 				# We no longer have to parse the input
