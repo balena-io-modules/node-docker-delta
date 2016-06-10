@@ -157,12 +157,12 @@ exports.applyDelta = (srcImage) ->
 		.then ->
 			# rsync doesn't fsync by itself
 			utils.waitPidAsync(spawn('sync'))
-		.catch (e) ->
-			if e?.code in DELTA_OUT_OF_SYNC_CODES
-				throw OutOfSyncError('Incompatible image')
-			else
-				throw e
 		.then ->
 			deltaStream.emit('id', dstId)
+	.catch (e) ->
+		if e?.code in DELTA_OUT_OF_SYNC_CODES
+			deltaStream.emit('error', new OutOfSyncError('Incompatible image'))
+		else
+			deltaStream.emit('error', e)
 
 	return deltaStream
