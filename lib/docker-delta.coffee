@@ -160,7 +160,7 @@ exports.applyDelta = (srcImage) ->
 	.catch (e) ->
 		# If the process failed for whatever reason, cleanup the empty image
 		dstId.then (dstId) ->
-			dockerUtils.docker.getImage(src).removeAsync()
+			docker.getImage(dstId).removeAsync()
 			.catch (e) ->
 				deltaStream.emit('error', e)
 		.then ->
