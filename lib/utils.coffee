@@ -1,6 +1,4 @@
 Promise = require 'bluebird'
-fs = Promise.promisifyAll(require('fs'))
-constants = require 'constants'
 
 # Similar to waitpid(), it gets an instance of ChildProcess and returns a
 # promise that settles after the process has stopped or errored
