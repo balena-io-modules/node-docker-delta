@@ -158,9 +158,15 @@ exports.applyDelta = (srcImage) ->
 		.then ->
 			deltaStream.emit('id', dstId)
 	.catch (e) ->
-		if e?.code in DELTA_OUT_OF_SYNC_CODES
-			deltaStream.emit('error', new OutOfSyncError('Incompatible image'))
-		else
-			deltaStream.emit('error', e)
+		# If the process failed for whatever reason, cleanup the empty image
+		dstId.then (dstId) ->
+			dockerUtils.docker.getImage(src).removeAsync()
+			.catch (e) ->
+				deltaStream.emit('error', e)
+		.then ->
+			if e?.code in DELTA_OUT_OF_SYNC_CODES
+				deltaStream.emit('error', new OutOfSyncError('Incompatible image'))
+			else
+				deltaStream.emit('error', e)
 
 	return deltaStream
