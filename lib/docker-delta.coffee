@@ -35,8 +35,6 @@ exports.createDelta = (srcImage, destImage, v2 = true) ->
 		.map (rootDir) ->
 			path.join(rootDir, '/')
 		.spread(rsync.createRsyncStream)
-		.catch (e) ->
-			deltaStream.emit('error', e)
 
 	# We also retrieve the container config for the image
 	config = docker.getImage(destImage).inspectAsync().get('Config')
