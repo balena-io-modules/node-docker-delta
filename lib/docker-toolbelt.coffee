@@ -47,14 +47,15 @@ createChainIdFromParent = (parent, dgsts) ->
 Docker::imageRootDir = (image) ->
 	Promise.all [
 		@infoAsync()
+		@versionAsync().get('Version')
 		@getImage(image).inspectAsync()
 	]
-	.spread (dockerInfo, imageInfo) ->
+	.spread (dockerInfo, dockerVersion, imageInfo) ->
 		dkroot = dockerInfo.DockerRootDir
 
 		imageId = imageInfo.Id
 
-		if semver.gte(dockerInfo.ServerVersion, '1.10.0')
+		if semver.gte(dockerVersion, '1.10.0')
 			[ hashType, hash ] = imageId.split(':')
 
 			fs.readFileAsync(path.join(dkroot, 'image/btrfs/imagedb/content', hashType, hash))
