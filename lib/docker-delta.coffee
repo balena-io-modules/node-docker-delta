@@ -8,7 +8,7 @@ TypedError = require 'typed-error'
 rsync = require './rsync'
 btrfs = require './btrfs'
 utils = require './utils'
-Docker = require './docker-toolbelt'
+Docker = require 'docker-toolbelt'
 
 docker = new Docker()
 
