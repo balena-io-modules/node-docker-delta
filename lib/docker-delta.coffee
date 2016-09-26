@@ -10,7 +10,7 @@ btrfs = require './btrfs'
 utils = require './utils'
 Docker = require 'docker-toolbelt'
 
-docker = new Docker()
+docker = new Docker(socketPath: process.env.DOCKER_SOCKET ? '/var/run/docker.sock')
 
 DELTA_OUT_OF_SYNC_CODES = [23, 24]
 
