@@ -104,69 +104,83 @@ parseDeltaStream = (input) ->
 
 		input.on('readable', parser)
 
+nullDisposer = ->
+	Promise.resolve(null)
+
+hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
+	rsyncArgs = [
+		'--timeout', '300'
+		'--archive'
+		'--delete'
+	]
+	rsyncArgs.push('--link-dest', dest) for dest in linkDests
+	rsyncArgs.push(srcRoot, dstRoot)
+	rsync = spawn('rsync', rsyncArgs)
+	utils.waitPidAsync(rsync)
+
 exports.applyDelta = (srcImage) ->
 	deltaStream = new stream.PassThrough()
-
+	rootDirFunc = nullDisposer
 	if srcImage?
-		srcRoot = docker.imageRootDir(srcImage)
-		.then (srcRoot) ->
-			# trailing slashes are significant for rsync
-			srcRoot = path.join(srcRoot, '/')
-	else
-		srcRoot = null
+		rootDirFunc = docker.imageRootDirMounted.bind(docker)
 
-	dstId = parseDeltaStream(deltaStream).get('dockerConfig').bind(docker).then(docker.createEmptyImage)
+	dstIdPromise = parseDeltaStream(deltaStream).get('dockerConfig').bind(docker).then(docker.createEmptyImage)
 
-	Promise.all [
-		docker.infoAsync().get('Driver')
-		srcRoot
-		dstId
-		dstId.then(docker.imageRootDir)
-	]
-	.spread (dockerDriver, srcRoot, dstId, dstRoot) ->
-		# trailing slashes are significant for rsync
-		dstRoot = path.join(dstRoot, '/')
+	Promise.using rootDirFunc(srcImage), (srcRoot) ->
+		srcRoot = path.join(srcRoot, '/') if srcRoot?
 
-		rsyncArgs = [
-			'--timeout', '300'
-			'--archive'
-			'--delete'
-			'--read-batch', '-'
-			dstRoot
-		]
+		Promise.join(
+			docker.infoAsync().get('Driver')
+			dstIdPromise
+			dstIdPromise.then(docker.imageRootDir)
+			(dockerDriver, dstId, dstRoot) ->
+				# trailing slashes are significant for rsync
+				dstRoot = path.join(dstRoot, '/')
 
-		Promise.attempt ->
-			switch dockerDriver
-				when 'btrfs'
-					if srcRoot?
-						btrfs.deleteSubvolAsync(dstRoot)
-						.then ->
-							btrfs.snapshotSubvolAsync(srcRoot, dstRoot)
-				when 'overlay'
-					if srcRoot?
-						rsyncArgs.push('--link-dest', srcRoot)
-				else
-					throw new Error("Unsupported driver #{dockerDriver}")
-		.then ->
-			rsync = spawn('rsync', rsyncArgs)
-			deltaStream.pipe(rsync.stdin)
+				Promise.try ->
+					switch dockerDriver
+						when 'btrfs'
+							if srcRoot?
+								btrfs.deleteSubvolAsync(dstRoot)
+								.then ->
+									btrfs.snapshotSubvolAsync(srcRoot, dstRoot)
+						when 'overlay'
+							if srcRoot?
+								hardlinkCopy(srcRoot, dstRoot, [ srcRoot ])
+						when 'aufs'
+							if srcRoot?
+								docker.aufsDiffPaths(srcImage)
+								.then (diffPaths) ->
+									hardlinkCopy(srcRoot, dstRoot, diffPaths)
+						else
+							throw new Error("Unsupported driver #{dockerDriver}")
+				.then ->
+					rsyncArgs = [
+						'--timeout', '300'
+						'--archive'
+						'--delete'
+						'--read-batch', '-'
+						dstRoot
+					]
+					rsync = spawn('rsync', rsyncArgs)
+					deltaStream.pipe(rsync.stdin)
 
-			utils.waitPidAsync(rsync)
-		.then ->
-			# rsync doesn't fsync by itself
-			utils.waitPidAsync(spawn('sync'))
-		.then ->
-			deltaStream.emit('id', dstId)
-	.catch (e) ->
-		# If the process failed for whatever reason, cleanup the empty image
-		dstId.then (dstId) ->
-			docker.getImage(dstId).removeAsync()
-			.catch (e) ->
-				deltaStream.emit('error', e)
-		.then ->
+					utils.waitPidAsync(rsync)
+				.then ->
+					# rsync doesn't fsync by itself
+					utils.waitPidAsync(spawn('sync'))
+				.then ->
+					deltaStream.emit('id', dstId)
+		)
+		.catch (e) ->
 			if e?.code in DELTA_OUT_OF_SYNC_CODES
 				deltaStream.emit('error', new OutOfSyncError('Incompatible image'))
 			else
 				deltaStream.emit('error', e)
+			# If the process failed for whatever reason, cleanup the empty image
+			dstIdPromise.then (dstId) ->
+				docker.getImage(dstId).removeAsync()
+				.catch (e) ->
+					deltaStream.emit('error', e)
 
 	return deltaStream
