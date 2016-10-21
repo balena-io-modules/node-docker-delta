@@ -1,3 +1,5 @@
+# v1.0.0
+
 Use a hardlink copy to support AUFS (and OverlayFS)
 
 # v0.0.12
