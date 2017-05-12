@@ -10,7 +10,7 @@ btrfs = require './btrfs'
 utils = require './utils'
 Docker = require 'docker-toolbelt'
 
-docker = new Docker()
+exports.docker = docker = new Docker()
 
 DELTA_OUT_OF_SYNC_CODES = [23, 24]
 
