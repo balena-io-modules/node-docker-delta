@@ -29,30 +29,32 @@ exports.createDelta = (srcImage, destImage, v2 = true) ->
 	# promises are in progress
 	deltaStream = new stream.PassThrough()
 
-	# We first get the two root directories and then apply rsync on them
-	rsyncStream = Promise.resolve [ srcImage, destImage ]
-		.bind(docker)
-		.map(docker.imageRootDir)
-		.map (rootDir) ->
-			path.join(rootDir, '/')
-		.spread(rsync.createRsyncStream)
-
-	# We also retrieve the container config for the image
+	# We retrieve the container config for the image
 	config = docker.getImage(destImage).inspectAsync().get('Config')
 
-	Promise.all [ config, rsyncStream ]
-	.spread (config, rsyncStream) ->
-		if v2
-			metadata =
-				version: 2
-				dockerConfig: config
+	# We then get the two root directories and then apply rsync on them
+	rootDirFunc = docker.imageRootDirMounted.bind(docker)
+	rootDirDisposers = [ srcImage, destImage ].map(rootDirFunc)
+	Promise.using rootDirDisposers, (rootDirs) ->
+		[ srcDir, destDir ] = rootDirs.map (rootDir) -> path.join(rootDir, path.sep)
+		rsyncStream = rsync.createRsyncStream(srcDir, destDir)
 
-			# Write the header of the delta format which is the serialised metadata
-			deltaStream.write(JSON.stringify(metadata))
-			# Write the NUL byte separator for the rsync binary stream
-			deltaStream.write(new Buffer([ 0x00 ]))
-		# Write the rsync binary stream
-		rsyncStream.pipe(deltaStream)
+		Promise.join config, rsyncStream, (config, rsyncStream) ->
+			if v2
+				metadata =
+					version: 2
+					dockerConfig: config
+
+				# Write the header of the delta format which is the serialised metadata
+				deltaStream.write(JSON.stringify(metadata))
+				# Write the NUL byte separator for the rsync binary stream
+				deltaStream.write(new Buffer([ 0x00 ]))
+			# Write the rsync binary stream
+			new Promise (resolve, reject) ->
+				rsyncStream
+				.on 'error', reject
+				.on 'close', resolve
+				.pipe(deltaStream)
 	.catch (e) ->
 		deltaStream.emit('error', e)
 
@@ -148,9 +150,9 @@ exports.applyDelta = (srcImage) ->
 						when 'overlay'
 							if srcRoot?
 								hardlinkCopy(srcRoot, dstRoot, [ srcRoot ])
-						when 'aufs'
+						when 'aufs', 'overlay2'
 							if srcRoot?
-								docker.aufsDiffPaths(srcImage)
+								docker.diffPaths(srcImage)
 								.then (diffPaths) ->
 									hardlinkCopy(srcRoot, dstRoot, diffPaths)
 						else
