@@ -13,6 +13,7 @@ Docker = require 'docker-toolbelt'
 docker = new Docker()
 
 DELTA_OUT_OF_SYNC_CODES = [23, 24]
+RSYNC_TIMEOUT = 1800
 
 exports.OutOfSyncError = class OutOfSyncError extends TypedError
 
@@ -109,7 +110,7 @@ nullDisposer = ->
 
 hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsyncArgs = [
-		'--timeout', '300'
+		'--timeout', "#{RSYNC_TIMEOUT}"
 		'--archive'
 		'--delete'
 	]
@@ -156,7 +157,7 @@ exports.applyDelta = (srcImage) ->
 							throw new Error("Unsupported driver #{dockerDriver}")
 				.then ->
 					rsyncArgs = [
-						'--timeout', '300'
+						'--timeout', "#{RSYNC_TIMEOUT}"
 						'--archive'
 						'--delete'
 						'--read-batch', '-'
