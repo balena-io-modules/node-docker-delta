@@ -109,6 +109,7 @@ nullDisposer = ->
 
 hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsyncArgs = [
+		'--timeout', '300'
 		'--archive'
 		'--delete'
 	]
@@ -155,6 +156,7 @@ exports.applyDelta = (srcImage) ->
 							throw new Error("Unsupported driver #{dockerDriver}")
 				.then ->
 					rsyncArgs = [
+						'--timeout', '300'
 						'--archive'
 						'--delete'
 						'--read-batch', '-'
