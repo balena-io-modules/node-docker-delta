@@ -30,7 +30,7 @@ exports.createDelta = (srcImage, destImage, v2 = true) ->
 	deltaStream = new stream.PassThrough()
 
 	# We retrieve the container config for the image
-	config = docker.getImage(destImage).inspectAsync().get('Config')
+	config = docker.getImage(destImage).inspect().get('Config')
 
 	# We then get the two root directories and then apply rsync on them
 	rootDirFunc = docker.imageRootDirMounted.bind(docker)
@@ -133,7 +133,7 @@ exports.applyDelta = (srcImage) ->
 		srcRoot = path.join(srcRoot, '/') if srcRoot?
 
 		Promise.join(
-			docker.infoAsync().get('Driver')
+			docker.info().get('Driver')
 			dstIdPromise
 			dstIdPromise.then(docker.imageRootDir)
 			(dockerDriver, dstId, dstRoot) ->
@@ -182,7 +182,7 @@ exports.applyDelta = (srcImage) ->
 				deltaStream.emit('error', e)
 			# If the process failed for whatever reason, cleanup the empty image
 			dstIdPromise.then (dstId) ->
-				docker.getImage(dstId).removeAsync()
+				docker.getImage(dstId).remove()
 				.catch (e) ->
 					deltaStream.emit('error', e)
 

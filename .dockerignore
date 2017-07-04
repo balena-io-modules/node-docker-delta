@@ -1,0 +1,8 @@
+.dockerignore
+.git
+node_modules
+Dockerfile
+Dockerfile.*
+Makefile
+.editorconfig
+coffeelint.json
