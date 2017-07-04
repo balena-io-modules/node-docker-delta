@@ -1,0 +1,3 @@
+FROM alpine
+RUN echo "Hello from the source image" > testfile
+CMD cat testfile
