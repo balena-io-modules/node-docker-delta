@@ -1,5 +1,4 @@
 path = require 'path'
-{ spawn } = require 'child_process'
 
 Promise = require 'bluebird'
 stream = require 'readable-stream'
@@ -7,7 +6,7 @@ TypedError = require 'typed-error'
 
 rsync = require './rsync'
 btrfs = require './btrfs'
-utils = require './utils'
+{ spawn } = require './utils'
 Docker = require 'docker-toolbelt'
 
 docker = new Docker()
@@ -119,7 +118,7 @@ hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsyncArgs.push('--link-dest', dest) for dest in linkDests
 	rsyncArgs.push(srcRoot, dstRoot)
 	rsync = spawn('rsync', rsyncArgs)
-	utils.waitPidAsync(rsync)
+	rsync.waitAsync()
 
 exports.applyDelta = (srcImage) ->
 	deltaStream = new stream.PassThrough()
@@ -168,10 +167,10 @@ exports.applyDelta = (srcImage) ->
 					rsync = spawn('rsync', rsyncArgs)
 					deltaStream.pipe(rsync.stdin)
 
-					utils.waitPidAsync(rsync)
+					rsync.waitAsync()
 				.then ->
 					# rsync doesn't fsync by itself
-					utils.waitPidAsync(spawn('sync'))
+					spawn('sync').waitAsync()
 				.then ->
 					deltaStream.emit('id', dstId)
 		)
