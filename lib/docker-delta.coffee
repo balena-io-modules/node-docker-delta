@@ -12,7 +12,6 @@ Docker = require 'docker-toolbelt'
 docker = new Docker()
 
 DELTA_OUT_OF_SYNC_CODES = [23, 24]
-RSYNC_TIMEOUT = 1800
 
 exports.OutOfSyncError = class OutOfSyncError extends TypedError
 
@@ -111,7 +110,6 @@ nullDisposer = ->
 
 hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsyncArgs = [
-		'--timeout', "#{RSYNC_TIMEOUT}"
 		'--archive'
 		'--delete'
 	]
@@ -120,7 +118,19 @@ hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsync = spawn('rsync', rsyncArgs)
 	rsync.waitAsync()
 
-exports.applyDelta = (srcImage) ->
+applyBatch = (rsync, batch, timeout) ->
+	new Promise (resolve, reject) ->
+		batch.pipe(rsync.stdin).on 'unpipe', ->
+			# wait for clean exit
+			p = rsync.waitAsync()
+			if timeout > 0
+				p = p.timeout(timeout).catch Promise.TimeoutError, ->
+					# timed out; kill it.
+					rsync.kill('SIGUSR1')
+					rsync.waitAsync()
+			p.then(resolve, reject)
+
+exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 	deltaStream = new stream.PassThrough()
 	rootDirFunc = nullDisposer
 	if srcImage?
@@ -158,16 +168,13 @@ exports.applyDelta = (srcImage) ->
 							throw new Error("Unsupported driver #{dockerDriver}")
 				.then ->
 					rsyncArgs = [
-						'--timeout', "#{RSYNC_TIMEOUT}"
 						'--archive'
 						'--delete'
 						'--read-batch', '-'
 						dstRoot
 					]
 					rsync = spawn('rsync', rsyncArgs)
-					deltaStream.pipe(rsync.stdin)
-
-					rsync.waitAsync()
+					applyBatch(rsync, deltaStream, timeout)
 				.then ->
 					# rsync doesn't fsync by itself
 					spawn('sync').waitAsync()
