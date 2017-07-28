@@ -119,16 +119,19 @@ hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsync.waitAsync()
 
 applyBatch = (rsync, batch, timeout) ->
-	new Promise (resolve, reject) ->
-		batch.pipe(rsync.stdin).on 'unpipe', ->
+	new Promise (resolve) ->
+		batch.pipe(rsync.stdin).on('unpipe', resolve)
+	.then ->
+		if timeout is 0
 			# wait for clean exit
-			p = rsync.waitAsync()
-			if timeout > 0
-				p = p.timeout(timeout).catch Promise.TimeoutError, ->
-					# timed out; kill it.
-					rsync.kill('SIGUSR1')
-					rsync.waitAsync()
-			p.then(resolve, reject)
+			return rsync.waitAsync()
+		else
+			# or until the given timeout is exceeded
+			return rsync.waitAsync().timeout(timeout)
+	.catch Promise.TimeoutError, ->
+		# timed out; kill it.
+		rsync.kill('SIGUSR1')
+		rsync.waitAsync()
 
 exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 	deltaStream = new stream.PassThrough()

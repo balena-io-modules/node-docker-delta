@@ -2,7 +2,7 @@
 
 # Returns a promise that settles after the subvolume `subvol` has been deleted
 exports.deleteSubvolAsync = (subvol) ->
-	spawn('btrfs', [ 'subvolume', 'delete', subvol]).waitAsync()
+	spawn('btrfs', [ 'subvolume', 'delete', subvol ]).waitAsync()
 
 # Returns a promise that settles after a snapshot of the subvolume `src` has
 # been created at `dest`
