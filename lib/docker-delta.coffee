@@ -1,5 +1,4 @@
 path = require 'path'
-{ spawn } = require 'child_process'
 
 Promise = require 'bluebird'
 stream = require 'readable-stream'
@@ -7,13 +6,12 @@ TypedError = require 'typed-error'
 
 rsync = require './rsync'
 btrfs = require './btrfs'
-utils = require './utils'
+{ spawn } = require './utils'
 Docker = require 'docker-toolbelt'
 
 docker = new Docker()
 
 DELTA_OUT_OF_SYNC_CODES = [23, 24]
-RSYNC_TIMEOUT = 1800
 
 exports.OutOfSyncError = class OutOfSyncError extends TypedError
 
@@ -112,16 +110,30 @@ nullDisposer = ->
 
 hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsyncArgs = [
-		'--timeout', "#{RSYNC_TIMEOUT}"
 		'--archive'
 		'--delete'
 	]
 	rsyncArgs.push('--link-dest', dest) for dest in linkDests
 	rsyncArgs.push(srcRoot, dstRoot)
 	rsync = spawn('rsync', rsyncArgs)
-	utils.waitPidAsync(rsync)
+	rsync.waitAsync()
 
-exports.applyDelta = (srcImage) ->
+applyBatch = (rsync, batch, timeout) ->
+	new Promise (resolve) ->
+		batch.pipe(rsync.stdin).on('unpipe', resolve)
+	.then ->
+		if timeout is 0
+			# wait for clean exit
+			return rsync.waitAsync()
+		else
+			# or until the given timeout is exceeded
+			return rsync.waitAsync().timeout(timeout)
+	.catch Promise.TimeoutError, ->
+		# timed out; kill it.
+		rsync.kill('SIGUSR1')
+		rsync.waitAsync()
+
+exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 	deltaStream = new stream.PassThrough()
 	rootDirFunc = nullDisposer
 	if srcImage?
@@ -159,19 +171,16 @@ exports.applyDelta = (srcImage) ->
 							throw new Error("Unsupported driver #{dockerDriver}")
 				.then ->
 					rsyncArgs = [
-						'--timeout', "#{RSYNC_TIMEOUT}"
 						'--archive'
 						'--delete'
 						'--read-batch', '-'
 						dstRoot
 					]
 					rsync = spawn('rsync', rsyncArgs)
-					deltaStream.pipe(rsync.stdin)
-
-					utils.waitPidAsync(rsync)
+					applyBatch(rsync, deltaStream, timeout)
 				.then ->
 					# rsync doesn't fsync by itself
-					utils.waitPidAsync(spawn('sync'))
+					spawn('sync').waitAsync()
 				.then ->
 					deltaStream.emit('id', dstId)
 		)
