@@ -139,7 +139,10 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 	if srcImage?
 		rootDirFunc = docker.imageRootDirMounted.bind(docker)
 
-	dstIdPromise = parseDeltaStream(deltaStream).get('dockerConfig').bind(docker).then(docker.createEmptyImage)
+	dstIdPromise = parseDeltaStream(deltaStream)
+		.get('dockerConfig')
+		.bind(docker)
+		.then(docker.createEmptyImage)
 
 	Promise.using rootDirFunc(srcImage), (srcRoot) ->
 		srcRoot = path.join(srcRoot, '/') if srcRoot?
