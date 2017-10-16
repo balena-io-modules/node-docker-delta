@@ -179,7 +179,11 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 						'--read-batch', '-'
 						dstRoot
 					]
-					rsync = spawn('rsync', rsyncArgs)
+					opts = {
+						# pipe stdin, ignore stdout/stderr
+						stdio: [ 'pipe', 'ignore', 'ignore' ]
+					}
+					rsync = spawn('rsync', rsyncArgs, opts)
 					applyBatch(rsync, deltaStream, timeout)
 				.then ->
 					# rsync doesn't fsync by itself
