@@ -11,7 +11,8 @@ Docker = require 'docker-toolbelt'
 
 docker = new Docker()
 
-DELTA_OUT_OF_SYNC_CODES = [23, 24]
+# code 19 isn't found in rsync's man pages.
+DELTA_OUT_OF_SYNC_CODES = [ 19, 23, 24 ]
 
 exports.OutOfSyncError = class OutOfSyncError extends TypedError
 
@@ -119,19 +120,26 @@ hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsync.waitAsync()
 
 applyBatch = (rsync, batch, timeout) ->
-	new Promise (resolve) ->
-		batch.pipe(rsync.stdin).on('unpipe', resolve)
-	.then ->
-		if timeout is 0
-			# wait for clean exit
-			return rsync.waitAsync()
-		else
-			# or until the given timeout is exceeded
-			return rsync.waitAsync().timeout(timeout)
-	.catch Promise.TimeoutError, ->
-		# timed out; kill it.
+	p = new Promise (resolve, reject) ->
+		batch.pipe(rsync.stdin)
+		.on('error', reject)
+		.on('finish', resolve)
+
+	if timeout isnt 0
+		p = p.timeout(timeout)
+
+	return p.then ->
+		# `p` is resolved on 'finish' but that doesn't guarantee rsync exited cleanly :/
+		# normally we'd end up here on rsync exiting with 0, but there are cases
+		# our pipe to its stdin is broken with no error and rsync still is up.
+		# so to find the reason rsync exited, we "poll" it once here via `waitAsync`.
+		# if rsync exited cleanly, `waitAsync` will resolve and the chain continues.
+		# for any other case, a short timeout will ensure we don't wait forever and
+		# manually kill rsync below.
+		rsync.waitAsync().timeout(5000)
+	.catch (err) ->
 		rsync.kill('SIGUSR1')
-		rsync.waitAsync()
+		rsync.waitAsync().throw(err)
 
 exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 	deltaStream = new stream.PassThrough()
@@ -139,7 +147,10 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 	if srcImage?
 		rootDirFunc = docker.imageRootDirMounted.bind(docker)
 
-	dstIdPromise = parseDeltaStream(deltaStream).get('dockerConfig').bind(docker).then(docker.createEmptyImage)
+	dstIdPromise = parseDeltaStream(deltaStream)
+		.get('dockerConfig')
+		.bind(docker)
+		.then(docker.createEmptyImage)
 
 	Promise.using rootDirFunc(srcImage), (srcRoot) ->
 		srcRoot = path.join(srcRoot, '/') if srcRoot?
@@ -176,7 +187,11 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 						'--read-batch', '-'
 						dstRoot
 					]
-					rsync = spawn('rsync', rsyncArgs)
+					opts = {
+						# pipe stdin, ignore stdout/stderr
+						stdio: [ 'pipe', 'ignore', 'ignore' ]
+					}
+					rsync = spawn('rsync', rsyncArgs, opts)
 					applyBatch(rsync, deltaStream, timeout)
 				.then ->
 					# rsync doesn't fsync by itself
