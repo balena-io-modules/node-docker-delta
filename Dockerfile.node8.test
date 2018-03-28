@@ -1,0 +1,29 @@
+FROM resin/intel-nuc-node:8
+
+VOLUME /var/lib/docker
+
+RUN apt-get update \
+	&& apt-get install -y aufs-tools rsync iptables \
+	&& rm -rf /var/lib/apt/lists/*
+
+ENV DOCKER_VERSION 1.11.2
+RUN wget -q -O /tmp/docker-${DOCKER_VERSION}.tgz https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz \
+	&& tar xvfz /tmp/docker-${DOCKER_VERSION}.tgz -C /tmp \
+	&& cp -r /tmp/docker/* /usr/bin/ \
+	&& rm -rf /tmp/docker \
+	&& chmod +x /usr/bin/docker*
+
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+
+RUN npm install --unsafe-perm  && npm cache clean --force
+
+COPY . /usr/src/app
+
+COPY test/services/ /etc/systemd/system/
+
+ENV INITSYSTEM on
+
+RUN systemctl enable docker
+CMD docker info
