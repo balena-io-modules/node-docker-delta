@@ -43,4 +43,12 @@ exports.createRsyncStream = (src, dest) ->
 			ps.stderr.pipe(process.stderr)
 			ps.stdout.pipe(process.stdout)
 
-			resolve(fs.createReadStream(pipePath).on('close', cleanup))
+			# Early Node 8 versions have a bug that force a seek upon creation of
+			# a read stream. The workaround is to pass the file descriptor directly.
+			# See: https://github.com/nodejs/node/issues/19240
+			fs.open pipePath, 'r', (err, fd) ->
+				if err
+					cleanup()
+					reject(err)
+				else
+					resolve(fs.createReadStream(undefined, fd: fd).on('close', cleanup))
