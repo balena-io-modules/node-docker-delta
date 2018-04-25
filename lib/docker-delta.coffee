@@ -119,7 +119,7 @@ hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 	rsync = spawn('rsync', rsyncArgs)
 	rsync.waitAsync()
 
-applyBatch = (rsync, batch, timeout) ->
+applyBatch = (rsync, batch, timeout, log) ->
 	p = new Promise (resolve, reject) ->
 		batch.pipe(rsync.stdin)
 		.on('error', reject)
@@ -129,6 +129,7 @@ applyBatch = (rsync, batch, timeout) ->
 		p = p.timeout(timeout)
 
 	return p.then ->
+		log('Batch input stream ended; waiting for rsync...')
 		# `p` is resolved on 'finish' but that doesn't guarantee rsync exited cleanly :/
 		# normally we'd end up here on rsync exiting with 0, but there are cases
 		# our pipe to its stdin is broken with no error and rsync still is up.
@@ -137,11 +138,19 @@ applyBatch = (rsync, batch, timeout) ->
 		# for any other case, a short timeout will ensure we don't wait forever and
 		# manually kill rsync below.
 		rsync.waitAsync().timeout(5000)
+		.tap ->
+			log('rsync exited cleanly')
+		.tapCatch (err) ->
+			log("Error waiting for rsync to exit: #{err}")
 	.catch (err) ->
+		log("Killing rsync with force due to error: #{err}")
 		rsync.kill('SIGUSR1')
+		log('Waiting for rsync to exit...')
 		rsync.waitAsync().throw(err)
 
-exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
+exports.applyDelta = (srcImage, { timeout = 0, log } = {}) ->
+	log ?= -> # noop
+
 	deltaStream = new stream.PassThrough()
 	rootDirFunc = nullDisposer
 	if srcImage?
@@ -149,8 +158,10 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 
 	dstIdPromise = parseDeltaStream(deltaStream)
 		.get('dockerConfig')
+		.tap -> log('Extracted image config')
 		.bind(docker)
 		.then(docker.createEmptyImage)
+		.tap (id) -> log("Created empty image #{id}")
 
 	Promise.using rootDirFunc(srcImage), (srcRoot) ->
 		srcRoot = path.join(srcRoot, '/') if srcRoot?
@@ -181,6 +192,8 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 						else
 							throw new Error("Unsupported driver #{dockerDriver}")
 				.then ->
+					log("Hard-linked files from '#{srcRoot}' to '#{dstRoot}'")
+
 					rsyncArgs = [
 						'--archive'
 						'--delete'
@@ -191,15 +204,23 @@ exports.applyDelta = (srcImage, { timeout = 0 } = {}) ->
 						# pipe stdin, ignore stdout/stderr
 						stdio: [ 'pipe', 'ignore', 'ignore' ]
 					}
+
+					log("Spawning rsync with arguments #{rsyncArgs.join(' ')}")
+
 					rsync = spawn('rsync', rsyncArgs, opts)
-					applyBatch(rsync, deltaStream, timeout)
+					applyBatch(rsync, deltaStream, timeout, log)
+					.tap ->
+						log('rsync exited successfully')
 				.then ->
+					log('fsync\'ing...')
 					# rsync doesn't fsync by itself
 					spawn('sync').waitAsync()
 				.then ->
+					log("All done. Image ID: #{dstId}")
 					deltaStream.emit('id', dstId)
 		)
 	.catch (e) ->
+		log("Error: #{e}")
 		if e?.code in DELTA_OUT_OF_SYNC_CODES
 			deltaStream.emit('error', new OutOfSyncError('Incompatible image'))
 		else
