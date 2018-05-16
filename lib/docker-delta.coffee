@@ -38,7 +38,7 @@ exports.createDelta = (srcImage, destImage, v2 = true, { ioTimeout = 0 } = {}) -
 		[ srcDir, destDir ] = rootDirs.map (rootDir) -> path.join(rootDir, path.sep)
 		rsyncPromise = rsync.createRsyncStream(srcDir, destDir, ioTimeout)
 
-		Promise.join config, rsyncStream, (config, rsyncStream) ->
+		Promise.join config, rsyncPromise, (config, [ rsyncExit, rsyncStream ]) ->
 			if v2
 				metadata =
 					version: 2
@@ -54,6 +54,8 @@ exports.createDelta = (srcImage, destImage, v2 = true, { ioTimeout = 0 } = {}) -
 				.on 'error', reject
 				.on 'close', resolve
 				.pipe(deltaStream)
+			.finally ->
+				rsyncExit.waitAsync()
 	.catch (e) ->
 		deltaStream.emit('error', e)
 

@@ -3,7 +3,7 @@ fs = require 'fs'
 tmp = require 'tmp'
 path = require 'path'
 mkfifoSync = require('mkfifo').mkfifoSync
-{ spawn } = require 'child_process'
+{ spawn } = require './utils'
 
 exports.createRsyncStream = (src, dest, ioTimeout) ->
 	new Promise (resolve, reject) ->
@@ -29,27 +29,17 @@ exports.createRsyncStream = (src, dest, ioTimeout) ->
 				dest, src
 			]
 
-			# Piping to cat causes /dev/stdout to be a pipe instead of a socket which
-			# allows rsync to open() it and write the batch file.
-			# console.error('Invoking rsync:', 'rsync ' + rsyncArgs.join(' '))
-
-			ps = spawn('rsync', rsyncArgs)
-			.on 'error', (error) ->
-				console.error('rsync error', error)
-				ps.stdout.emit('error', error)
-			.on 'exit', (code, signal) ->
-				if code isnt 0
-					ps.stdout.emit('error', new Error("rsync exited. code: #{code} signal: #{signal}"))
-
-			ps.stderr.pipe(process.stderr)
-			ps.stdout.pipe(process.stdout)
+			ps = spawn('rsync', rsyncArgs, stdio: 'ignore')
 
 			# Early Node 8 versions have a bug that force a seek upon creation of
 			# a read stream. The workaround is to pass the file descriptor directly.
 			# See: https://github.com/nodejs/node/issues/19240
 			fs.open pipePath, 'r', (err, fd) ->
 				if err
-					cleanup()
-					reject(err)
+					ps.kill('SIGUSR1')
+					ps.waitAsync().finally ->
+						cleanup()
+						reject(err)
 				else
-					resolve(fs.createReadStream(undefined, fd: fd).on('close', cleanup))
+					stream = fs.createReadStream(undefined, fd: fd).on('close', cleanup)
+					resolve([ ps, stream ])
