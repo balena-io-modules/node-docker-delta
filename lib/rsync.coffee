@@ -5,7 +5,7 @@ path = require 'path'
 mkfifoSync = require('mkfifo').mkfifoSync
 { spawn } = require './utils'
 
-exports.createRsyncStream = (src, dest, ioTimeout) ->
+exports.createRsyncStream = (src, dest, ioTimeout, log) ->
 	new Promise (resolve, reject) ->
 		tmp.dir unsafeCleanup: true, (err, tmpDirPath, cleanup) ->
 			pipePath = path.join(tmpDirPath, 'rsync.pipe')
@@ -29,6 +29,7 @@ exports.createRsyncStream = (src, dest, ioTimeout) ->
 				dest, src
 			]
 
+			log('Invoking rsync:', 'rsync ' + rsyncArgs.join(' '))
 			ps = spawn('rsync', rsyncArgs, stdio: 'ignore')
 
 			# Early Node 8 versions have a bug that force a seek upon creation of
@@ -36,8 +37,10 @@ exports.createRsyncStream = (src, dest, ioTimeout) ->
 			# See: https://github.com/nodejs/node/issues/19240
 			fs.open pipePath, 'r', (err, fd) ->
 				if err
+					log('Killing rsync due to error...')
 					ps.kill('SIGUSR1')
 					ps.waitAsync().finally ->
+						log('rsync exited')
 						cleanup()
 						reject(err)
 				else
