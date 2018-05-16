@@ -23,7 +23,7 @@ exports.OutOfSyncError = class OutOfSyncError extends TypedError
 # The stream format is the following where || means concatenation:
 #
 # result := jsonMetadata || 0x00 || rsyncData
-exports.createDelta = (srcImage, destImage, v2 = true) ->
+exports.createDelta = (srcImage, destImage, v2 = true, { ioTimeout = 0 } = {}) ->
 	# We need a passthrough stream so that we can return it immediately while the
 	# promises are in progress
 	deltaStream = new stream.PassThrough()
@@ -36,7 +36,7 @@ exports.createDelta = (srcImage, destImage, v2 = true) ->
 	rootDirDisposers = [ srcImage, destImage ].map(rootDirFunc)
 	Promise.using rootDirDisposers, (rootDirs) ->
 		[ srcDir, destDir ] = rootDirs.map (rootDir) -> path.join(rootDir, path.sep)
-		rsyncStream = rsync.createRsyncStream(srcDir, destDir)
+		rsyncPromise = rsync.createRsyncStream(srcDir, destDir, ioTimeout)
 
 		Promise.join config, rsyncStream, (config, rsyncStream) ->
 			if v2

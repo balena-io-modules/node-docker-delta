@@ -5,8 +5,7 @@ path = require 'path'
 mkfifoSync = require('mkfifo').mkfifoSync
 { spawn } = require 'child_process'
 
-exports.createRsyncStream = (src, dest) ->
-	# console.error('CREATING STREAM', src, 'dest', dest)
+exports.createRsyncStream = (src, dest, ioTimeout) ->
 	new Promise (resolve, reject) ->
 		tmp.dir unsafeCleanup: true, (err, tmpDirPath, cleanup) ->
 			pipePath = path.join(tmpDirPath, 'rsync.pipe')
@@ -21,6 +20,8 @@ exports.createRsyncStream = (src, dest) ->
 				'--no-i-r'
 				'--delete'
 				'--hard-links'
+
+				'--timeout', ioTimeout # in seconds
 
 				'--compress-level=9'
 				'--one-file-system'
