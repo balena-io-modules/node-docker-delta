@@ -8,6 +8,10 @@ mkfifoSync = require('mkfifo').mkfifoSync
 exports.createRsyncStream = (src, dest, ioTimeout, log) ->
 	new Promise (resolve, reject) ->
 		tmp.dir unsafeCleanup: true, (err, tmpDirPath, cleanup) ->
+			if err
+				log('Failed to create temporary directory')
+				return reject(err)
+
 			pipePath = path.join(tmpDirPath, 'rsync.pipe')
 
 			mkfifoSync(pipePath, 0o600)
