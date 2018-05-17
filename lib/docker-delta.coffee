@@ -58,10 +58,11 @@ exports.createDelta = (srcImage, destImage, v2 = true, { log, ioTimeout = 0 } = 
 				.pipe(deltaStream)
 			.finally ->
 				rsyncExit.waitAsync()
-			.finally ->
-				log('rsync exited')
 	.catch (e) ->
 		deltaStream.emit('error', e)
+	.finally ->
+		log('rsync exited')
+		deltaStream.emit('close')
 
 	return deltaStream
 
