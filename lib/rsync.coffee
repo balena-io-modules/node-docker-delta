@@ -41,10 +41,14 @@ exports.createRsyncStream = (src, dest, ioTimeout, log) ->
 			# See: https://github.com/nodejs/node/issues/19240
 			fs.open pipePath, 'r', (err, fd) ->
 				if err
-					log('Killing rsync due to error...')
+					log('Failed to open pipe for reading. Killing rsync...')
 					ps.kill('SIGUSR1')
-					ps.waitAsync().finally ->
+					ps.waitAsync()
+					.tap ->
 						log('rsync exited')
+					.tapCatch (e) ->
+						log("rsync exited with error: #{e}")
+					.finally ->
 						cleanup()
 						reject(err)
 				else
