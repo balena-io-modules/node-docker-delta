@@ -1,3 +1,6 @@
 FROM alpine
-RUN echo "Hello from the destination image" > testfile
+# Change a few characters but ensure file length remains the same
+RUN echo "HeXXo from the image" > testfile
+# Force date modified to a known fixed value
+RUN touch -mt 1806220000 testfile
 CMD cat testfile
