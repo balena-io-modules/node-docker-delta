@@ -21,6 +21,7 @@ exports.createRsyncStream = (src, dest, ioTimeout, log) ->
 			rsyncArgs = [
 				'--archive'
 				'--compress'
+				'--checksum'
 				'--no-i-r'
 				'--delete'
 				'--hard-links'

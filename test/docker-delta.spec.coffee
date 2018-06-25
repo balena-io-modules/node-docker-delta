@@ -52,4 +52,4 @@ describe 'docker-delta', ->
 		pt.setEncoding('utf8')
 		docker.run(@imageId, undefined, pt).then (container) ->
 			expect(container.output.StatusCode).to.equal(0)
-			expect(pt.read()).to.equal("Hello from the destination image\r\n")
+			expect(pt.read()).to.equal("HeXXo from the image\r\n")

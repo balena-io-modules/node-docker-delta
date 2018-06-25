@@ -1,3 +1,5 @@
 FROM alpine
-RUN echo "Hello from the source image" > testfile
+RUN echo "Hello from the image" > testfile
+# Force date modified to a known fixed value
+RUN touch -mt 1806220000 testfile
 CMD cat testfile
