@@ -14,6 +14,11 @@ docker = new Docker()
 # code 19 isn't found in rsync's man pages.
 DELTA_OUT_OF_SYNC_CODES = [ 19, 23, 24 ]
 
+# We set a large timeout (10 minutes) for rsync to exit after applying the batch.
+# For most cases 5 seconds is more than enough, but in systems with slow IO
+# it can be a bit longer.
+RSYNC_EXIT_TIMEOUT = 10 * 60 * 1000
+
 exports.OutOfSyncError = class OutOfSyncError extends TypedError
 
 # Takes two strings `srcImage` and `destImage` which represent docker images
@@ -144,7 +149,7 @@ applyBatch = (rsync, batch, timeout, log) ->
 		# if rsync exited cleanly, `waitAsync` will resolve and the chain continues.
 		# for any other case, a short timeout will ensure we don't wait forever and
 		# manually kill rsync below.
-		rsync.waitAsync().timeout(5000)
+		rsync.waitAsync().timeout(RSYNC_EXIT_TIMEOUT)
 		.tap ->
 			log('rsync exited cleanly')
 		.tapCatch (err) ->
