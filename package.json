@@ -30,7 +30,6 @@
     "docker-toolbelt": "^3.0.1",
     "dockerode": "^2.5.0",
     "event-stream": "^3.3.2",
-    "mkfifo": "^0.1.5",
     "readable-stream": "^2.1.2",
     "semver": "^5.1.0",
     "tar-stream": "^1.5.2",

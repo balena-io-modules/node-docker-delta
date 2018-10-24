@@ -2,8 +2,7 @@ Promise = require 'bluebird'
 fs = require 'fs'
 tmp = require 'tmp'
 path = require 'path'
-mkfifoSync = require('mkfifo').mkfifoSync
-{ spawn } = require './utils'
+{ spawn, mkfifoSync } = require './utils'
 
 exports.createRsyncStream = (src, dest, ioTimeout, log) ->
 	new Promise (resolve, reject) ->
@@ -14,7 +13,7 @@ exports.createRsyncStream = (src, dest, ioTimeout, log) ->
 
 			pipePath = path.join(tmpDirPath, 'rsync.pipe')
 
-			mkfifoSync(pipePath, 0o600)
+			mkfifoSync(pipePath)
 
 			# To produce the delta that takes us from `src` to `dest`
 			# we have to tell rsync to copy `dest` to `src`
