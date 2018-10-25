@@ -1,4 +1,4 @@
-{ spawn } = require 'child_process'
+{ spawn, execSync } = require 'child_process'
 Promise = require 'bluebird'
 
 # Similar to waitpid(), it gets an instance of ChildProcess and returns a
@@ -38,3 +38,6 @@ exports.spawn = (cmd, args, opts) ->
 	ps.waitAsync = ->
 		waitPidAsync(cmd, ps, processStatus)
 	return ps
+
+exports.mkfifoSync = (fifoPath) ->
+	execSync("mkfifo -m 0600 #{fifoPath}")
