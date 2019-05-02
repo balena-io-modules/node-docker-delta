@@ -7,12 +7,8 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-docker build -f Dockerfile.node6.test -t localhost/docker-delta-node6-test .
-docker run --privileged --name deltatest -d localhost/docker-delta-node6-test
+docker build -f "Dockerfile.node${NODE_VERSION}.test" -t docker-delta-test .
+docker run --privileged --name deltatest -d docker-delta-test
 docker exec deltatest bash -c "npm run lint && ./node_modules/.bin/mocha --compilers coffee:coffee-script/register"
 
 cleanup
-
-docker build -f Dockerfile.node8.test -t localhost/docker-delta-node8-test .
-docker run --privileged --name deltatest -d localhost/docker-delta-node8-test
-docker exec deltatest bash -c "npm run lint && ./node_modules/.bin/mocha --compilers coffee:coffee-script/register"

@@ -1,4 +1,4 @@
-FROM balenalib/intel-nuc-node:8
+FROM balenalib/intel-nuc-node:10
 
 # Install Systemd
 ENV container docker
