@@ -1,0 +1,39 @@
+version: 2
+
+buildSteps: &buildSteps
+  - checkout
+  - setup_remote_docker
+  - run: |
+      set -ex
+      set -o pipefail
+      sh ./test.sh
+
+jobs:
+  node-6:
+    docker:
+      - image: library/docker:17
+    environment:
+      NODE_VERSION: '6'
+    steps: *buildSteps
+
+  node-8:
+    docker:
+      - image: library/docker:17
+    environment:
+      NODE_VERSION: '8'
+    steps: *buildSteps
+
+  node-10:
+    docker:
+      - image: library/docker:17
+    environment:
+      NODE_VERSION: '10'
+    steps: *buildSteps
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - node-6
+      - node-8
+      - node-10
