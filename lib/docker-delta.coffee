@@ -224,7 +224,7 @@ exports.applyDelta = (srcImage, { timeout = 0, log } = {}) ->
 					# stdin stream on rsync, it will never close, and the process
 					# can hang. We force close here. This also works pre-node 8,
 					# as ending a stream twice is fine
-					rsync.on 'end', ->
+					rsync.on 'close', ->
 						rsync.stdin.end()
 
 					applyBatch(rsync, deltaStream, timeout, log)
