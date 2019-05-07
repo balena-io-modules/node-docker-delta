@@ -220,6 +220,13 @@ exports.applyDelta = (srcImage, { timeout = 0, log } = {}) ->
 					log("Spawning rsync with arguments #{rsyncArgs.join(' ')}")
 
 					rsync = spawn('rsync', rsyncArgs, opts)
+					# Post node 8, if the delta stream is still attached to the
+					# stdin stream on rsync, it will never close, and the process
+					# can hang. We force close here. This also works pre-node 8,
+					# as ending a stream twice is fine
+					rsync.on 'end', ->
+						rsync.stdin.end()
+
 					applyBatch(rsync, deltaStream, timeout, log)
 					.tap ->
 						log('rsync exited successfully')
