@@ -133,7 +133,22 @@ hardlinkCopy = (srcRoot, dstRoot, linkDests) ->
 
 applyBatch = (rsync, batch, timeout, log) ->
 	p = new Promise (resolve, reject) ->
-		batch.pipe(rsync.stdin)
+		batch
+		.on('error', reject)
+		.on 'finish', ->
+			# There seems to be a race condition between
+			# rsync exiting and it's stdin pipe being closed. If
+			# the stdin is not closed, the delta application never
+			# finishes. Due to this, once the batch has fully
+			# drained, we force close stdin. We did have this
+			# change in the rsync.on('close') handler, but that
+			# only worked some of the time. Anecdotal evidence
+			# says that this works all of the time, and it's also
+			# technically correct, the best kind. Be careful
+			# removing this, as it seems to be required post node8.
+			rsync.stdin.end()
+			resolve()
+		.pipe(rsync.stdin)
 		.on('error', reject)
 		.on('finish', resolve)
 
@@ -220,13 +235,6 @@ exports.applyDelta = (srcImage, { timeout = 0, log } = {}) ->
 					log("Spawning rsync with arguments #{rsyncArgs.join(' ')}")
 
 					rsync = spawn('rsync', rsyncArgs, opts)
-					# Post node 8, if the delta stream is still attached to the
-					# stdin stream on rsync, it will never close, and the process
-					# can hang. We force close here. This also works pre-node 8,
-					# as ending a stream twice is fine
-					rsync.on 'close', ->
-						rsync.stdin.end()
-
 					applyBatch(rsync, deltaStream, timeout, log)
 					.tap ->
 						log('rsync exited successfully')
