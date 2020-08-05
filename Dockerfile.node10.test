@@ -36,8 +36,8 @@ RUN apt-get update \
 	&& apt-get install -y aufs-tools rsync iptables wget git \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV DOCKER_VERSION 1.11.2
-RUN wget -q -O /tmp/docker-${DOCKER_VERSION}.tgz https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz \
+ENV DOCKER_VERSION 17.03.0-ce
+RUN wget -q -O /tmp/docker-${DOCKER_VERSION}.tgz https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz \
 	&& tar xvfz /tmp/docker-${DOCKER_VERSION}.tgz -C /tmp \
 	&& cp -r /tmp/docker/* /usr/bin/ \
 	&& rm -rf /tmp/docker \

@@ -31,8 +31,6 @@
     "docker-toolbelt": "^3.3.5",
     "dockerode": "^2.5.8",
     "readable-stream": "^2.1.2",
-    "semver": "^5.7.0",
-    "tar-stream": "^1.5.2",
     "tmp": "0.0.28",
     "typed-error": "^2.0.0"
   }
