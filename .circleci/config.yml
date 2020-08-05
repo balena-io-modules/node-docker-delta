@@ -2,7 +2,8 @@ version: 2
 
 buildSteps: &buildSteps
   - checkout
-  - setup_remote_docker
+  - setup_remote_docker:
+      version: 17.03.0-ce
   - run: |
       set -ex
       set -o pipefail
@@ -11,21 +12,21 @@ buildSteps: &buildSteps
 jobs:
   node-6:
     docker:
-      - image: library/docker:17
+      - image: library/docker:19-git
     environment:
       NODE_VERSION: '6'
     steps: *buildSteps
 
   node-8:
     docker:
-      - image: library/docker:17
+      - image: library/docker:19-git
     environment:
       NODE_VERSION: '8'
     steps: *buildSteps
 
   node-10:
     docker:
-      - image: library/docker:17
+      - image: library/docker:19-git
     environment:
       NODE_VERSION: '10'
     steps: *buildSteps
