@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": false,
+        "target": "es5",
+        "outDir": "build",
+        "noImplicitAny": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "strictNullChecks": true,
+        "sourceMap": false,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "allowJs": true,
+        "checkJs": true
+    },
+    "include": [
+        "lib/**/*",
+    ]
+}
