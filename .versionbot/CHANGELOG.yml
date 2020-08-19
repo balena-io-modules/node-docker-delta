@@ -1,0 +1,443 @@
+- commits:
+  - author: Cameron Diver
+    body: This seems to work a lot more reliably, and is also not too hacky.
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@balena.io>
+    hash: f1535045cf54a2bfbacaac04d00170f4be3ecd32
+    subject: Move rsync stdin close to batch finish callback
+  date: "2019-05-08T11:00:59Z"
+  version: 2.2.9
+- commits:
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@balena.io>
+    hash: 0db7a9829061ad40591a8ecf8ca65b804d3bfd35
+    subject: Use the correct process event when force closing rsync stdin
+  date: "2019-05-07T13:44:59Z"
+  version: 2.2.8
+- commits:
+  - author: Cameron Diver
+    body: |-
+      Move prepublishOnly -> prepare
+      Remove lint from prepare step
+    footers:
+      signed-off-by: Cameron Diver <cameron@balena.io>
+    hash: 95945ab5ed29f387fe148d4bf46ea2800db6e5fd
+    subject: fixup package.json
+  - author: Cameron Diver
+    body: |-
+      We explicitly close the stdin stream for the rsync process when the
+      process ends. When the data is piped into the stdin, it doesn't always
+      close the stdin stream when the process finishes. This causes the
+      application to hang indefinitely.
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@balena.io>
+    hash: 25fb04dfca6b756abd5b2cf2250f325c5ed4f9ea
+    subject: Fix rsync delta application on node 8
+  date: "2019-05-07T12:50:57Z"
+  version: 2.2.7
+- commits:
+  - author: Pagan Gazzard
+    body: ""
+    footers:
+      change-type: patch
+    hash: de94b806109c87314f6e4e88fca20233804b70a0
+    subject: Move event-stream to devDependencies
+  date: "2019-05-02T13:48:25Z"
+  version: 2.2.6
+- commits:
+  - author: Pagan Gazzard
+    body: ""
+    footers:
+      change-type: patch
+    hash: 7b68643b081e872c55aa42d9326b123f381820c5
+    subject: Use workflows for tests and add node 10
+  date: "2019-05-02T13:38:19Z"
+  version: 2.2.5
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: patch
+    hash: 36a0f4977226ea9f615ecb9e314074c76124e33c
+    subject: Pin event-stream to avoid a security issue
+  date: "2018-12-03T14:08:26Z"
+  version: 2.2.4
+- commits:
+  - author: Pagan Gazzard
+    body: ""
+    footers:
+      change-type: patch
+    hash: ebef4061d02f58078494d0db3c95a9c8846636eb
+    subject: Update to typed-error 2
+  date: "2018-11-06T15:13:27Z"
+  version: 2.2.3
+- commits:
+  - author: Pablo Carranza Velez
+    body: This solves unnecessary timeouts when disk IO is very slow.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablocarranza@gmail.com>
+    hash: 4d6006efed81283ec69083c697ca847718de0e20
+    subject: Use a larger (10 minute) timeout for rsync to exit after applying
+  - author: Pablo Carranza Velez
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablocarranza@gmail.com>
+    hash: a83dcbcb5e4634ae1ee3e158f1c46e9973f94213
+    subject: Add a minimal README.md
+  - author: Pablo Carranza Velez
+    body: |-
+      The mkfifo package has a native extension that
+      is failing to build on node 10, and we use it for a single simple
+      call to mkfifo that we can just as well do with
+      the mkfifo program instead.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablocarranza@gmail.com>
+    hash: a8826d403bf2718fb3e67f289bd87d73cef1ac8b
+    subject: Replace the mkfifo package for an execSync(mkfifo)
+  date: "2018-10-25T17:00:23Z"
+  version: 2.2.2
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: patch
+    hash: 762e9547d8f9050488193f59f20fb5c9b51ae945
+    subject: Ensure rsync compares checksums to determine changed files
+  date: "2018-06-25T17:42:58Z"
+  version: 2.2.1
+- commits:
+  - author: Pagan Gazzard
+    body: ""
+    footers:
+      change-type: patch
+    hash: 70b5359fedc100907c0086f7d25b7ad19cc210ad
+    subject: Removed unused dependencies
+  - author: Pagan Gazzard
+    body: ""
+    hash: 8670e850ba5d97fbaecc938fc2060ea3b4f157ed
+    subject: 'circleci: update docker'
+  date: "2020-08-05T15:20:21Z"
+  version: 2.2.10
+- commits:
+  - author: Akis Kesoglou
+    body: This ensures that rsync bails out after the specified amount of inactivity
+      in I/O, otherwise it’ll stay there forever doing nothing and never exit. This
+      is poor man’s handling of cancellation.
+    footers:
+      change-type: minor
+    hash: 1c85e98763ea27aaa1d2a160311ffd5b6a3dfd00
+    subject: Allow specifying an I/O timeout when generating a delta
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: patch
+    hash: 52e91b5c13f9035967d70dece6be3345c4561fd2
+    subject: Ensure rsync has exited before cleaning up
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: minor
+    hash: 4992f7f27b2cf1fa241297f8091a868c8225e2aa
+    subject: Optionally log debug information during delta generation
+  - author: Akis Kesoglou
+    body: ""
+    hash: 7af9057263c0c07b086a18cb90a07937c8c8c365
+    subject: Enforce specific order of events and always send a ‘close’ event
+  - author: Akis Kesoglou
+    body: ""
+    hash: 9901aa1c508789d0852818afd1f51ae9239640c9
+    subject: Handle error if creating the temporary directory failed
+  - author: Akis Kesoglou
+    body: ""
+    hash: f83d2b9ea0a1442ccaa0613c9a8cf36f1f424a59
+    subject: Differentiate successful/failed exit of rsync in log output
+  date: "2018-05-17T10:25:30Z"
+  version: 2.2.0
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: minor
+    hash: 333c5d61df5443ac820344945fb2be3c7604dc08
+    subject: Add logging to assist debugging
+  date: "2018-04-25T13:53:15Z"
+  version: 2.1.0
+- commits:
+  - author: Akis Kesoglou
+    body: 'Early Node 8 versions have a bug that force a seek upon creation of a read
+      stream. The workaround is to pass the file descriptor directly. See: https://github.com/nodejs/node/issues/19240'
+    footers:
+      change-type: patch
+    hash: 21914cc4aef162b2acf083a15ea8690e45539611
+    subject: Fix seek error thrown when creating read stream in Node 8
+  date: "2018-03-28T10:15:48Z"
+  version: 2.0.5
+- commits:
+  - author: Pablo Carranza Velez
+    body: |-
+      When calling ps.waitAsync for a child process ps that has already exited, the 'exit' event would
+      not be fired again, so the promise would never resolve. This patch adds handlers for the 'exit'
+      and 'error' events as soon as the process is spawned, so that waitAsync can check if the process
+      has already exited and handle this situation properly.
+      This bug would cause applyDelta to occasionally hang because rsync had exited before waitAsync was called.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 5a8d24fde51250e553c7875c224b051f046e03f7
+    subject: Avoid applyDelta hangs by making waitAsync work properly for processes
+      that have already exited
+  date: "2018-02-25T22:15:13Z"
+  version: 2.0.4
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    hash: bad84b1618acc00799994d3199a1efa277fe0579
+    subject: Minor code formatting improvement
+  - author: Akis Kesoglou
+    body: This reduces memory usage slightly but also fixes an issue where rsync’s
+      un-consumed output would prevent the delta stream from ending for quite a long
+      while.
+    footers:
+      change-type: patch
+    hash: c019f89ebcacb0da1a4983a83d26c56ad3398471
+    subject: Ignore rsync’s stdio
+  - author: Akis Kesoglou
+    body: |-
+      This makes sure we correctly track and forward rsync’s exit status.
+      The issue we’re working around here is rsync’s stdin pipe closing without failure even if there’s an error from rsync. So we make sure to always poll rsync once that the pipe has closed and determine the exit status and forward appropriately.
+    footers:
+      change-type: patch
+    hash: a8c2cff583562066598cb52e7fb883ef9985c3da
+    subject: Improve rsync termination
+  date: "2017-10-17T07:15:39Z"
+  version: 2.0.3
+- commits:
+  - author: Akis Kesoglou
+    body: Before this commit, it was possible for the promise returned by `rootDirFunc`
+      to be rejected and the rejection would go unhandled.
+    footers:
+      change-type: patch
+    hash: 0ac5c1eba66204720b1dc97f5f88a18ce03c3203
+    subject: Make sure all rejections in applyDelta are forwarded
+  date: "2017-10-12T20:20:33Z"
+  version: 2.0.2
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    hash: 30340685a0e5e4a33d314cf597e88e5119e2556e
+    subject: Slightly improve the API for spawning and waiting
+  - author: Akis Kesoglou
+    body: With this, we manually start the timeout countdown the moment the batch
+      stream closes (either successfully or due to error), and if that grace period
+      ends and rsync hasn’t quit on its own, then semi-forcefully kill it (we send
+      SIGUSR1 which instructs rsync to do immediate cleanup and exit).
+    footers:
+      change-type: major
+    hash: 25d58ddb115cd0eb5fa3362b3cafd97adfe0aeb0
+    subject: Manually handle rsync timeout
+  - author: Akis Kesoglou
+    body: ""
+    hash: 7ef60371b351a72ae3f01bc3d09280cb1dfed175
+    subject: Address review feedback
+  date: "2017-08-02T11:53:45Z"
+  version: 2.0.0
+- commits:
+  - author: Akis Kesoglou
+    body: Remove the extension from `main` so that we can effortlessly work with the
+      CS file instead of the generated JS one (which now only exists after publishing
+      anyway).
+    footers:
+      change-type: patch
+    hash: e8c5fab735bab599540f6e5392a93eb5029a256c
+    subject: Add compatibility with `npm link`
+  date: "2017-07-28T17:53:37Z"
+  version: 1.1.2
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: minor
+    hash: d0f456039aa3291d054124b125f2ec2d0787b4ac
+    subject: Added support for generating and applying deltas on overlay2
+  date: "2017-06-23T09:29:58Z"
+  version: 1.1.0
+- commits:
+  - author: Pablo Carranza Velez
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 401ba67eb65bd993003c7928c3836cc4178365a4
+    subject: Update docker-toolbelt to v1.3.4 to support docker 17.03
+  - author: Petros Angelatos
+    body: |-
+      This timeout was put there because of an implementation issue with
+      rsync that was fixed in resin-supervisor#425
+    footers:
+      change-type: patch
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 2d142cf638f6872ba8a2fa3b4552f98a3c88c6cb
+    subject: remove arbitrary 6 minute timeout
+  date: "2017-05-05T00:30:30Z"
+  version: 1.0.2
+- commits:
+  - author: Pablo Carranza Velez
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 07be3dfbaf494f5442e4cf9d112252abae68c3f9
+    subject: Bump docker-toolbelt to v1.3.3
+  - author: Pablo Carranza Velez
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: b80769710fd8c2c35de48e2fabc55901c09e1027
+    subject: Add versionist for versioning and changelog
+  date: "2016-12-20T20:57:25Z"
+  version: 1.0.1
+- commits:
+  - author: Pablo Carranza Velez
+    body: ""
+    hash: 70c4916d7a64a3ce17cb450f8773deffaca2b7d1
+    subject: Use a hardlink copy to support AUFS (and OverlayFS)
+  - author: Pablo Carranza Velez
+    body: ""
+    hash: ba5faf9828b835262c1f261345e8f558bb6fd4b5
+    subject: Use docker-toolbelt from npm
+  - author: Petros Angelatos
+    body: |-
+      Older versions of the docker daemon don't report the server version in
+      the docker.info() response.
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 7259bd0aa7b7d2d4e100ceed6d0d15700f404eea
+    subject: use docker.version() to get the server version
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: c405db4e2072c3c5e410791b79f3cf766109bea1
+    subject: remove unused variables caught by coffeescope
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 6a22588a409bc9091421e8eb35cb040bd7c01a4c
+    subject: Remove undefiend dockerUtil variable
+  - author: Petros Angelatos
+    body: |-
+      Before this patch, if rsyncStream had an error but config resolved, the
+      chain of Promise.all would run with rsyncStream set to `undefined`
+      Now any rejections on the rsyncStream will short-circuit Promise.all and
+      will prevent the chain from running.
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: b5ee6529968713e87a2650345def144609832958
+    subject: don't shadow errors of rsyncStream
+  - author: Petros Angelatos
+    body: |-
+      while trying to apply the delta, the library creates a new docker image
+      by snapshotting the source image. Make sure we clean up after ourselves
+      in case the application fails.
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 4d2eed3bc2507351e749f8e9db54b46aff67cdbc
+    subject: cleanup docker image when delta application fails
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 2b21436744ba97db64f6ad839a0da20e1d464a99
+    subject: bump package version
+  - author: Petros Angelatos
+    body: |-
+      applyDelta returns a stream, not the promise chain. We have to convert
+      any rejections to error events
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 0c8c2ded47a967d603f561d8923ed91cc7a1b76a
+    subject: pass the errors to the returned stream
+  - author: Petros Angelatos
+    body: |-
+      This is used when applying a delta based on a `scratch` image which is
+      an empty filesystem
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 791810c3e5f6018c59151826ad2f7b0d77f17362
+    subject: support applying a delta without a src image
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: af20119b635356576740cb8fac63dccde0aae266
+    subject: fix linter error
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 0169fd0067577d725ed1a100414c3a1045a6d7a2
+    subject: avoid using internal stream properties
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 36df9fb79dd60d13ca5d1c99c96341afbc9a9d22
+    subject: make sure we handle parsing errors gracefully
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 5a6a3937413378b88dd8676ce9a8821a8de4d3f5
+    subject: remove unused function
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 42398e6aca88c925dbd1ffcc08b2a520ca22a2a0
+    subject: remove debug comments
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 01cc90314e48771ba948bb3ed5a23bdd60756e5a
+    subject: fix unreferenced variables in rsync exit code handling
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: f0bb7851438f3609cdb8729ac1f6ae7cc60e1755
+    subject: make buffer calls compatible with node 0.10.x
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: c9d6e0aa5a4972c048566629f5b295d3748508ee
+    subject: prepare repo for npm publishing
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 1636f5465c99093b089ac62e708969096b02378a
+    subject: remove accidentally commited file. will rebase the repo
+  - author: Petros Angelatos
+    body: ""
+    footers:
+      signed-off-by: Petros Angelatos <petrosagg@gmail.com>
+    hash: 583d7d9765e6736eb67f25dbe49ef2ee87193ee2
+    subject: reintroduce OutOfSyncError for easy error handling
+  - author: Pagan Gazzard
+    body: ""
+    hash: a1484c6606d8d9160ea2b425053b0b50cd973335
+    subject: Add resin-lint
+  date: "2016-10-21T19:20:16Z"
+  version: 1.0.0
