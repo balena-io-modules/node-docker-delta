@@ -6,7 +6,6 @@
   "scripts": {
     "prettify": "balena-lint --fix -e js -e ts lib/ test/",
     "lint": "balena-lint -e js -e ts lib/ test/",
-    "pretest": "npm run lint",
     "test": "bash ./test.sh",
     "versionist": "versionist"
   },
@@ -24,8 +23,7 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
-    "docker-toolbelt": "^3.3.10",
-    "dockerode": "^2.5.8",
+    "docker-toolbelt": "^4.1.0",
     "readable-stream": "^2.3.8",
     "tmp": "0.0.28",
     "typed-error": "^2.0.0"

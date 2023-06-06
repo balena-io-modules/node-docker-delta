@@ -9,9 +9,9 @@ const es = require('event-stream');
 const JSONStream = require('JSONStream');
 const Bluebird = require('bluebird');
 const stream = require('stream');
-const Docker = require('dockerode');
+const { DockerToolbelt } = require('docker-toolbelt');
 
-const docker = new Docker();
+const docker = new DockerToolbelt();
 
 const dockerDelta = require('../lib/docker-delta');
 
@@ -63,16 +63,19 @@ describe('docker-delta', function () {
 			'source-image',
 			'dest-image',
 			true,
+			{ log: console.log },
 		);
 		expect(deltaStream).to.be.a.Stream;
-		const str = deltaStream.pipe(dockerDelta.applyDelta('source-image')).on(
-			'id',
-			(function (_this) {
-				return function (id) {
-					return (_this.imageId = id);
-				};
-			})(this),
-		);
+		const str = deltaStream
+			.pipe(dockerDelta.applyDelta('source-image', { log: console.log }))
+			.on(
+				'id',
+				(function (_this) {
+					return function (id) {
+						return (_this.imageId = id);
+					};
+				})(this),
+			);
 		return expect(str).to.emit('id');
 	});
 
@@ -80,9 +83,11 @@ describe('docker-delta', function () {
 		expect(this.imageId).to.be.a.string;
 		const pt = new stream.PassThrough();
 		pt.setEncoding('utf8');
-		return docker.run(this.imageId, void 0, pt).then(function (container) {
-			expect(container.output.StatusCode).to.equal(0);
-			return expect(pt.read()).to.equal('HeXXo from the image\r\n');
-		});
+		return docker
+			.run(this.imageId, void 0, pt)
+			.then(function ([data, _container]) {
+				expect(data.StatusCode).to.equal(0);
+				return expect(pt.read()).to.equal('HeXXo from the image\r\n');
+			});
 	});
 });
