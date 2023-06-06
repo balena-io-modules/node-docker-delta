@@ -13,6 +13,6 @@ docker run --privileged --name deltatest -d docker-delta-test
 # give docker daemon a few moments to finish starting up...
 sleep 5
 
-docker exec deltatest /bin/sh -c "npm run lint && ./node_modules/.bin/mocha --compilers coffee:coffee-script/register"
+docker exec deltatest /bin/sh -c "npm run lint && ./node_modules/.bin/mocha"
 
 cleanup
