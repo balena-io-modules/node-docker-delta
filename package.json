@@ -4,7 +4,8 @@
   "description": "Generate binary filesystem diffs between docker images to speed up distribution",
   "main": "lib/docker-delta",
   "scripts": {
-    "prepare": "coffee -c lib",
+    "prepublishOnly": "npm run build",
+    "build": "coffee -c lib",
     "lint": "resin-lint lib",
     "pretest": "npm run lint",
     "test": "bash ./test.sh",
