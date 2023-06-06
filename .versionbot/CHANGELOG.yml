@@ -1,4 +1,15 @@
 - commits:
+    - subject: Convert to Javascript
+      hash: 9600706c47334a800636a97dc5e367e57f46d637
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Akis Kesoglou
+  version: 3.0.0
+  title: ""
+  date: 2023-06-06T16:39:46.816Z
+- commits:
     - subject: Use Flowzone
       hash: 304293989d99a867a67a7167300ee36e318dbb03
       body: ""
