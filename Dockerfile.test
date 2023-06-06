@@ -1,0 +1,15 @@
+FROM docker:23-dind
+
+RUN set -eux; apk add --no-cache \
+	rsync \
+	git \
+	nodejs-lts \
+	npm
+
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+RUN npm install --unsafe-perm && npm cache clean --force
+
+COPY . /usr/src/app/
+RUN npm run build
