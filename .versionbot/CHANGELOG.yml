@@ -1,4 +1,22 @@
 - commits:
+    - subject: Update docker-toolbelt to v4.1.0
+      hash: 149b5dbeaea0aefbb874619a336b87a108a4a02a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+    - subject: Update dependencies
+      hash: a96cbd1da65ff9be3e6b9a72f62a7bbf38e3c104
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+  version: 3.0.1
+  title: ""
+  date: 2023-06-07T11:30:52.115Z
+- commits:
     - subject: Convert to Javascript
       hash: 9600706c47334a800636a97dc5e367e57f46d637
       body: ""
