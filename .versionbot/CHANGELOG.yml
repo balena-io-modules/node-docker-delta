@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update to docker-toolbelt v5
+      hash: 17a088168c63db13a9ff2a7be933ce9fc80e9d44
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+  version: 3.0.2
+  title: ""
+  date: 2023-06-30T14:12:54.510Z
+- commits:
     - subject: Update docker-toolbelt to v4.1.0
       hash: 149b5dbeaea0aefbb874619a336b87a108a4a02a
       body: ""
