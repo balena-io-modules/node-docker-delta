@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
-    "docker-toolbelt": "^4.1.0",
+    "docker-toolbelt": "^5.0.0",
+    "dockerode": "^3.3.5",
     "readable-stream": "^2.3.8",
     "tmp": "0.0.28",
     "typed-error": "^2.0.0"
