@@ -9,9 +9,9 @@ const es = require('event-stream');
 const JSONStream = require('JSONStream');
 const Bluebird = require('bluebird');
 const stream = require('stream');
-const { DockerToolbelt } = require('docker-toolbelt');
+const Dockerode = require('dockerode');
 
-const docker = new DockerToolbelt();
+const docker = new Dockerode({ Promise: Bluebird });
 
 const dockerDelta = require('../lib/docker-delta');
 
