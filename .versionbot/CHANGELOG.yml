@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fix linting by ensuring it uses typescript 5.1
+      hash: 018d615ca7540329e635bcc6d4d5491f7348a6ec
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 3.0.3
+  title: ""
+  date: 2023-11-15T20:07:30.886Z
+- commits:
     - subject: Update to docker-toolbelt v5
       hash: 17a088168c63db13a9ff2a7be933ce9fc80e9d44
       body: ""
