@@ -31,7 +31,7 @@ function buildImg(name, dockerfile) {
 		)
 		.then(function (res) {
 			return new Bluebird(function (resolve, reject) {
-				var outputStream;
+				let outputStream;
 				return (outputStream = res
 					.pipe(JSONStream.parse())
 					.pipe(
