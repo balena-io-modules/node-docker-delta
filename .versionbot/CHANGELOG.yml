@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update typed-error to 3.x
+      hash: 31171f3bcba34078a62a25af740dcc2377386313
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 3.0.4
+  title: ""
+  date: 2023-11-16T16:20:34.011Z
+- commits:
     - subject: Fix linting by ensuring it uses typescript 5.1
       hash: 018d615ca7540329e635bcc6d4d5491f7348a6ec
       body: ""
