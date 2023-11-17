@@ -7,7 +7,6 @@
     "prettify": "balena-lint --fix -e js -e ts lib/ test/",
     "lint": "balena-lint -e js -e ts lib/ test/",
     "test": "bash ./test.sh",
-    "versionist": "versionist",
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\""
   },
   "author": "Balena Ltd.",
@@ -22,8 +21,7 @@
     "lint-staged": "^15.1.0",
     "mocha": "^3.5.3",
     "mochainon": "^2.0.0",
-    "typescript": "~5.1.6",
-    "versionist": "^2.18.0"
+    "typescript": "~5.1.6"
   },
   "dependencies": {
     "bluebird": "^3.7.2",
