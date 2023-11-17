@@ -1,4 +1,50 @@
 - commits:
+    - subject: Update chai-events
+      hash: 194c92365ee19f92f67aa056a86ed50e2cccfe1e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Switch to tmp-promise
+      hash: a89eeb5b2db0122a23d41b57278930f094bd0dee
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Update mocha to 10.x
+      hash: dffa4dd1b2221fe0d432e1b51090af1b9c67c01a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Use chai directly rather than via mochainon
+      hash: 63ab8a3f85b84d8ce5c8776c9e7c6fbb9519ac58
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Remove redundant versionist entries from package.json
+      hash: 3e1a5e86d1fb6d3120284530f42e063bbfb7da8e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Set up husky/lint-staged for automatic linting
+      hash: b1149eda25407b1c323a0f0b267dfbf91b3f8d7c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 3.0.5
+  title: ""
+  date: 2023-11-17T16:11:42.114Z
+- commits:
     - subject: Update typed-error to 3.x
       hash: 31171f3bcba34078a62a25af740dcc2377386313
       body: ""
