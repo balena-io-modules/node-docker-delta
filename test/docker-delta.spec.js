@@ -1,5 +1,5 @@
-'use strict';
-
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { describe, before, it } = require('mocha');
 const chai = require('chai');
 
 chai.use(require('chai-events'));
@@ -7,15 +7,14 @@ chai.use(require('chai-stream'));
 
 const es = require('event-stream');
 const JSONStream = require('JSONStream');
-const Bluebird = require('bluebird');
 const stream = require('stream');
 const Dockerode = require('dockerode');
 
-const docker = new Dockerode({ Promise: Bluebird });
+const docker = new Dockerode();
 
-const dockerDelta = require('../lib/docker-delta');
+const dockerDelta = require('..');
 
-const expect = chai.expect;
+const { expect } = chai;
 
 function buildImg(name, dockerfile) {
 	return docker
@@ -30,9 +29,8 @@ function buildImg(name, dockerfile) {
 			},
 		)
 		.then(function (res) {
-			return new Bluebird(function (resolve, reject) {
-				let outputStream;
-				return (outputStream = res
+			return new Promise(function (resolve, reject) {
+				res
 					.pipe(JSONStream.parse())
 					.pipe(
 						es.through(function (data) {
@@ -44,7 +42,7 @@ function buildImg(name, dockerfile) {
 						}),
 					)
 					.on('end', resolve)
-					.on('error', reject));
+					.on('error', reject);
 			});
 		});
 }
@@ -83,11 +81,9 @@ describe('docker-delta', function () {
 		expect(this.imageId).to.be.a.string;
 		const pt = new stream.PassThrough();
 		pt.setEncoding('utf8');
-		return docker
-			.run(this.imageId, void 0, pt)
-			.then(function ([data, _container]) {
-				expect(data.StatusCode).to.equal(0);
-				return expect(pt.read()).to.equal('HeXXo from the image\r\n');
-			});
+		return docker.run(this.imageId, [], pt).then(function ([data, _container]) {
+			expect(data.StatusCode).to.equal(0);
+			return expect(pt.read()).to.equal('HeXXo from the image\r\n');
+		});
 	});
 });

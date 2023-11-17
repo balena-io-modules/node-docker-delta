@@ -1,0 +1,21 @@
+{
+	"compilerOptions": {
+		"module": "Node16",
+		"strict": true,
+		"noUnusedParameters": true,
+		"noUnusedLocals": true,
+		"outDir": "out/",
+		"preserveConstEnums": true,
+		"removeComments": true,
+		"rootDir": "lib",
+		"sourceMap": true,
+		"target": "es2022",
+		"declaration": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true
+	},
+	"include": [
+		"lib/**/*"
+	]
+}
