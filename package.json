@@ -28,7 +28,7 @@
     "docker-toolbelt": "^5.0.3",
     "dockerode": "^3.3.5",
     "readable-stream": "^2.3.8",
-    "tmp": "0.0.28",
+    "tmp-promise": "^3.0.3",
     "typed-error": "^3.2.2"
   },
   "versionist": {
