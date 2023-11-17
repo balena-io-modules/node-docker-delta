@@ -1,9 +1,9 @@
 'use strict';
 
-const m = require('mochainon');
+const chai = require('chai');
 
-m.chai.use(require('chai-events'));
-m.chai.use(require('chai-stream'));
+chai.use(require('chai-events'));
+chai.use(require('chai-stream'));
 
 const es = require('event-stream');
 const JSONStream = require('JSONStream');
@@ -15,7 +15,7 @@ const docker = new Dockerode({ Promise: Bluebird });
 
 const dockerDelta = require('../lib/docker-delta');
 
-const expect = m.chai.expect;
+const expect = chai.expect;
 
 function buildImg(name, dockerfile) {
 	return docker
