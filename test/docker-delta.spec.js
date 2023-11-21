@@ -58,6 +58,7 @@ describe('docker-delta', function () {
 
 	it('creates a delta between two images and applies it', function () {
 		const deltaStream = dockerDelta.createDelta(
+			docker,
 			'source-image',
 			'dest-image',
 			true,
@@ -65,7 +66,9 @@ describe('docker-delta', function () {
 		);
 		expect(deltaStream).to.be.a.Stream;
 		const str = deltaStream
-			.pipe(dockerDelta.applyDelta('source-image', { log: console.log }))
+			.pipe(
+				dockerDelta.applyDelta(docker, 'source-image', { log: console.log }),
+			)
 			.on(
 				'id',
 				(function (_this) {

@@ -5,12 +5,8 @@ import { TypedError } from 'typed-error';
 import * as rsync from './rsync';
 import * as btrfs from './btrfs';
 import { spawn } from './utils';
-import Dockerode from 'dockerode';
+import type Dockerode from 'dockerode';
 import * as dt from 'docker-toolbelt';
-
-const docker = new Dockerode({
-	Promise: Bluebird as unknown as typeof Promise,
-});
 
 const DELTA_OUT_OF_SYNC_CODES = [19, 23, 24];
 
@@ -21,6 +17,7 @@ class OutOfSyncError extends TypedError {
 }
 
 export const createDelta = function (
+	docker: Dockerode,
 	srcImage: string,
 	destImage: string,
 	v2 = true,
@@ -183,6 +180,7 @@ async function applyBatch(
 }
 
 export const applyDelta = function (
+	docker: Dockerode,
 	srcImage: string,
 	{
 		log = function () {
