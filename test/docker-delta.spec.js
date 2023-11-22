@@ -7,7 +7,7 @@ chai.use(require('chai-stream'));
 
 const es = require('event-stream');
 const JSONStream = require('JSONStream');
-const stream = require('stream');
+const stream = require('node:stream');
 const Dockerode = require('dockerode');
 
 const docker = new Dockerode();

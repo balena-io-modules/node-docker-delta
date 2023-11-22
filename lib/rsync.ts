@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import tmp from 'tmp-promise';
-import path from 'path';
+import path from 'node:path';
 import { spawn, mkfifoSync } from './utils';
 
 export const createRsyncStream = async function (

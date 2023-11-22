@@ -3,7 +3,7 @@ import {
 	execSync,
 	ChildProcess,
 	SpawnOptions,
-} from 'child_process';
+} from 'node:child_process';
 
 interface ProcessStatus {
 	exited: boolean;
