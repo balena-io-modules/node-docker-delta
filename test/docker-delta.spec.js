@@ -16,35 +16,28 @@ const dockerDelta = require('..');
 
 const { expect } = chai;
 
-function buildImg(name, dockerfile) {
-	return docker
-		.buildImage(
-			{
-				context: './test',
-				src: [dockerfile],
-			},
-			{
-				t: name,
-				dockerfile: dockerfile,
-			},
-		)
-		.then(function (res) {
-			return new Promise(function (resolve, reject) {
-				res
-					.pipe(JSONStream.parse())
-					.pipe(
-						es.through(function (data) {
-							if (data.error) {
-								return reject(data.error);
-							} else {
-								return console.log(data);
-							}
-						}),
-					)
-					.on('end', resolve)
-					.on('error', reject);
-			});
-		});
+async function buildImg(name, dockerfile) {
+	const res = await docker.buildImage(
+		{
+			context: './test',
+			src: [dockerfile],
+		},
+		{
+			t: name,
+			dockerfile: dockerfile,
+		},
+	);
+	await stream.promises.pipeline(
+		res,
+		JSONStream.parse(),
+		es.through(function (data) {
+			if (data.error) {
+				this.emit('error', data.error);
+			} else {
+				console.log(data);
+			}
+		}),
+	);
 }
 
 describe('docker-delta', function () {
@@ -69,14 +62,9 @@ describe('docker-delta', function () {
 			.pipe(
 				dockerDelta.applyDelta(docker, 'source-image', { log: console.log }),
 			)
-			.on(
-				'id',
-				(function (_this) {
-					return function (id) {
-						return (_this.imageId = id);
-					};
-				})(this),
-			);
+			.on('id', (id) => {
+				this.imageId = id;
+			});
 		return expect(str).to.emit('id');
 	});
 

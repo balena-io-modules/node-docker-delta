@@ -54,12 +54,7 @@ export const createDelta = function (
 				deltaStream.write(Buffer.from([0x00]));
 			}
 			try {
-				await new Promise(function (resolve, reject) {
-					rsyncStream
-						.on('error', reject)
-						.on('close', resolve)
-						.pipe(deltaStream);
-				});
+				await stream.promises.pipeline(rsyncStream, deltaStream);
 			} finally {
 				await rsyncExit.waitAsync();
 			}
@@ -142,17 +137,7 @@ async function applyBatch(
 	timeout: number,
 	log: typeof console.log,
 ) {
-	let p = new Promise<void>(function (resolve, reject) {
-		batch
-			.on('error', reject)
-			.on('finish', function () {
-				rsyncProcess.stdin!.end();
-				resolve();
-			})
-			.pipe(rsyncProcess.stdin!)
-			.on('error', reject)
-			.on('finish', resolve);
-	});
+	let p = stream.promises.pipeline(batch, rsyncProcess.stdin!);
 
 	if (timeout !== 0) {
 		p = Bluebird.resolve(p).timeout(timeout);
