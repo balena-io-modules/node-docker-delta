@@ -16,7 +16,6 @@
     "@types/bluebird": "^3.5.42",
     "@types/dockerode": "^3.3.23",
     "@types/node": "^16.18.63",
-    "@types/readable-stream": "^2.3.15",
     "chai": "^4.3.10",
     "chai-events": "0.0.3",
     "chai-stream": "0.0.0",
@@ -31,7 +30,6 @@
     "bluebird": "^3.7.2",
     "docker-toolbelt": "^5.0.3",
     "dockerode": "^3.3.5",
-    "readable-stream": "^2.3.8",
     "tmp-promise": "^3.0.3",
     "typed-error": "^3.2.2"
   },

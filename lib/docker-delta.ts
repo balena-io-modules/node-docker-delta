@@ -1,6 +1,6 @@
 import path from 'path';
 import Bluebird from 'bluebird';
-import stream from 'readable-stream';
+import stream from 'stream';
 import { TypedError } from 'typed-error';
 import * as rsync from './rsync';
 import * as btrfs from './btrfs';
