@@ -1,4 +1,44 @@
 - commits:
+    - subject: Use `stream.promises.pipeline` rather than manual `pipe` and promise
+        wrapping
+      hash: 6fca27760517d83ac02c5b2f24b5828565e52eb5
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Use `fs.promises` rather than manually wrapping `fs` calls with a promise
+      hash: 48e988a2699bd398619813cb6ab7cb49a4044afc
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Switch from readable-stream 2.x to nodejs built in stream passthrough
+      hash: 64cfa5cb894f909b115773c85ab64aebb5f32579
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Require dockerode instance to be passed in rather than defaulting one
+      hash: aab1e3b8da86491f77fb9bdd7eb136978b54c939
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Convert to typescript
+      hash: 481465bb47b08b9bcf4478560237291bb16627ff
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+  version: 4.0.0
+  title: ""
+  date: 2023-11-22T15:46:29.569Z
+- commits:
     - subject: Update chai-events
       hash: 194c92365ee19f92f67aa056a86ed50e2cccfe1e
       body: ""
