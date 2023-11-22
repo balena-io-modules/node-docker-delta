@@ -82,16 +82,15 @@ function bufIndexOfByte(buf: Buffer, byte: number) {
 
 function parseDeltaStream(input: stream.PassThrough) {
 	return new Promise<{ [key: string]: any }>(function (resolve, reject) {
-		let buf = Buffer.alloc(0);
 		const parser = function () {
-			const chunks = [buf];
+			const chunks = [];
 
 			let chunk;
 			while ((chunk = input.read()) != null) {
 				chunks.push(chunk);
 			}
 
-			buf = Buffer.concat(chunks);
+			const buf = Buffer.concat(chunks);
 
 			const sep = bufIndexOfByte(buf, 0x00);
 			if (sep !== -1) {
