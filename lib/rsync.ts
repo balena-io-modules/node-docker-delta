@@ -8,7 +8,7 @@ export const createRsyncStream = async function (
 	dest: string,
 	ioTimeout: number,
 	log: typeof console.log,
-) {
+): Promise<[ReturnType<typeof spawn>, fs.ReadStream]> {
 	let tmpDirPath: string;
 	let cleanup: () => Promise<void>;
 	try {
@@ -41,31 +41,26 @@ export const createRsyncStream = async function (
 	const ps = spawn('rsync', rsyncArgs, {
 		stdio: 'ignore',
 	});
-	return new Promise<[ReturnType<typeof spawn>, fs.ReadStream]>(
-		(resolve, reject) => {
-			fs.open(pipePath, 'r', async function (error, fd) {
-				let stream;
-				if (error) {
-					log('Failed to open pipe for reading. Killing rsync...');
-					ps.kill('SIGUSR1');
-					try {
-						await ps.waitAsync();
-						log('rsync exited');
-					} catch (e) {
-						log('rsync exited with error: ' + e);
-					} finally {
-						void cleanup();
-						reject(error);
-					}
-				} else {
-					stream = fs
-						.createReadStream('', {
-							fd: fd,
-						})
-						.on('close', cleanup);
-					resolve([ps, stream]);
-				}
-			});
-		},
-	);
+	try {
+		const fd = await fs.promises.open(pipePath, 'r');
+		const stream = fs
+			.createReadStream('', {
+				fd: fd,
+			})
+			.on('close', cleanup);
+		return [ps, stream];
+	} catch (err) {
+		log('Failed to open pipe for reading. Killing rsync...');
+		ps.kill('SIGUSR1');
+		try {
+			await ps.waitAsync();
+			log('rsync exited');
+		} catch (e) {
+			log('rsync exited with error: ' + e);
+		} finally {
+			void cleanup();
+			// eslint-disable-next-line no-unsafe-finally -- We always want to rethrow the original error
+			throw err;
+		}
+	}
 };
