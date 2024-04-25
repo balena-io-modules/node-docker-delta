@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "bluebird": "^3.7.2",
-    "docker-toolbelt": "^5.0.3",
-    "dockerode": "^3.3.5",
+    "docker-toolbelt": "^6.0.2",
+    "dockerode": "^4.0.2",
     "tmp-promise": "^3.0.3",
     "typed-error": "^3.2.2"
   },
