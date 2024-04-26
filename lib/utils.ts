@@ -1,9 +1,5 @@
-import {
-	spawn as $spawn,
-	execSync,
-	ChildProcess,
-	SpawnOptions,
-} from 'node:child_process';
+import type { ChildProcess, SpawnOptions } from 'node:child_process';
+import { spawn as $spawn, execSync } from 'node:child_process';
 
 interface ProcessStatus {
 	exited: boolean;
