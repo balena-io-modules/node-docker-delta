@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dockerode and docker-toolbelt
+      hash: 079d87ec2e0077aa84fe3ed1abd512a90ab6081e
+      body: |
+        Update dockerode to v4 and docker-toolbelt to v6
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Felipe Lalanne
+  version: 4.0.1
+  title: ""
+  date: 2024-04-26T14:40:33.689Z
+- commits:
     - subject: Use `stream.promises.pipeline` rather than manual `pipe` and promise
         wrapping
       hash: 6fca27760517d83ac02c5b2f24b5828565e52eb5
@@ -356,13 +368,16 @@
         When calling ps.waitAsync for a child process ps that has already
         exited, the 'exit' event would
 
-        not be fired again, so the promise would never resolve. This patch adds handlers for the 'exit'
+        not be fired again, so the promise would never resolve. This patch adds
+        handlers for the 'exit'
 
-        and 'error' events as soon as the process is spawned, so that waitAsync can check if the process
+        and 'error' events as soon as the process is spawned, so that waitAsync
+        can check if the process
 
         has already exited and handle this situation properly.
 
-        This bug would cause applyDelta to occasionally hang because rsync had exited before waitAsync was called.
+        This bug would cause applyDelta to occasionally hang because rsync had
+        exited before waitAsync was called.
       footers:
         change-type: patch
         signed-off-by: Pablo Carranza Velez <pablo@resin.io>
@@ -388,7 +403,10 @@
       body: >-
         This makes sure we correctly track and forward rsync’s exit status.
 
-        The issue we’re working around here is rsync’s stdin pipe closing without failure even if there’s an error from rsync. So we make sure to always poll rsync once that the pipe has closed and determine the exit status and forward appropriately.
+        The issue we’re working around here is rsync’s stdin pipe closing
+        without failure even if there’s an error from rsync. So we make sure to
+        always poll rsync once that the pipe has closed and determine the exit
+        status and forward appropriately.
       footers:
         change-type: patch
       hash: a8c2cff583562066598cb52e7fb883ef9985c3da
