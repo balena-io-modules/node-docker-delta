@@ -1,4 +1,22 @@
 - commits:
+    - subject: Export OutOfSyncError
+      hash: 90e267a3c74f3122821cc6d4fa056019e0a3339e
+      body: >
+        The export was lost during the [migration from CoffeeScript to
+        JavaScript](https://github.com/balena-io-modules/node-docker-delta/commit/9600706c47334a800636a97dc5e367e57f46d637#diff-c440d0187a0693cb8ff06e40fa4d7f3df979918586c0948cfef38594237ff533L22)
+
+        but the supervisor has been [assuming the export is
+        available](https://github.com/balena-os/balena-supervisor/blob/master/src/lib/docker-utils.ts#L235)
+        since then. This is required to fix v2 delta support in
+        balena-os/balena-supervisor#2350
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Felipe Lalanne
+  version: 4.1.0
+  title: ""
+  date: 2024-07-05T16:16:07.158Z
+- commits:
     - subject: Update dockerode and docker-toolbelt
       hash: 079d87ec2e0077aa84fe3ed1abd512a90ab6081e
       body: |
