@@ -12,7 +12,7 @@ const DELTA_OUT_OF_SYNC_CODES = [19, 23, 24];
 
 const RSYNC_EXIT_TIMEOUT = 10 * 60 * 1000;
 
-class OutOfSyncError extends TypedError {
+export class OutOfSyncError extends TypedError {
 	// noop
 }
 
