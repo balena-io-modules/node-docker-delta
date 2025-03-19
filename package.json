@@ -12,7 +12,7 @@
   "author": "Balena Ltd.",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@balena/lint": "^7.2.4",
+    "@balena/lint": "^9.0.0",
     "@types/bluebird": "^3.5.42",
     "@types/dockerode": "^3.3.23",
     "@types/node": "^16.18.63",
