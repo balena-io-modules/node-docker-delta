@@ -15,7 +15,7 @@
     "@balena/lint": "^9.3.8",
     "@types/bluebird": "^3.5.42",
     "@types/dockerode": "^3.3.44",
-    "@types/node": "^16.18.126",
+    "@types/node": "^22.0.0",
     "chai": "^4.5.0",
     "chai-events": "0.0.3",
     "chai-stream": "0.0.0",
