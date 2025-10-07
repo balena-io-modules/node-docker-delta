@@ -56,7 +56,7 @@ export const createRsyncStream = async function (
 			await ps.waitAsync();
 			log('rsync exited');
 		} catch (e) {
-			log('rsync exited with error: ' + e);
+			log(`rsync exited with error: ${e}`);
 		} finally {
 			void cleanup();
 			// eslint-disable-next-line no-unsafe-finally -- We always want to rethrow the original error

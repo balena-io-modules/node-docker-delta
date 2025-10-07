@@ -105,7 +105,7 @@ function parseDeltaStream(input: stream.PassThrough) {
 						reject(new Error('Unknown version: ' + metadata.version));
 					}
 				} catch (error) {
-					reject(error);
+					reject(error as Error);
 				}
 			}
 		};
@@ -146,16 +146,16 @@ async function applyBatch(
 		await p;
 		log('Batch input stream ended; waiting for rsync...');
 		try {
-			await Bluebird.resolve(await rsyncProcess.waitAsync()).timeout(
+			await Bluebird.resolve(rsyncProcess.waitAsync()).timeout(
 				RSYNC_EXIT_TIMEOUT,
 			);
 			log('rsync exited cleanly');
 		} catch (err) {
-			log('Error waiting for rsync to exit: ' + err);
+			log(`Error waiting for rsync to exit: ${err}`);
 			throw err;
 		}
 	} catch (err) {
-		log('Killing rsync with force due to error: ' + err);
+		log(`Killing rsync with force due to error: ${err}`);
 		rsyncProcess.kill('SIGUSR1');
 		log('Waiting for rsync to exit...');
 		await rsyncProcess.waitAsync();
@@ -236,7 +236,7 @@ export const applyDelta = function (
 		deltaStream.emit('id', dstId);
 	}).catch(async function (e) {
 		log('Error: ' + e);
-		if (e.code != null && DELTA_OUT_OF_SYNC_CODES.indexOf(e.code) >= 0) {
+		if (e.code != null && DELTA_OUT_OF_SYNC_CODES.includes(e.code)) {
 			deltaStream.emit('error', new OutOfSyncError('Incompatible image'));
 		} else {
 			deltaStream.emit('error', e);

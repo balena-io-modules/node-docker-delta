@@ -1,0 +1,4 @@
+type: 'node'
+upstream:
+  - repo: 'docker-toolbelt'
+    url: 'https://github.com/balena-io-modules/docker-toolbelt'
