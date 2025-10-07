@@ -1,6 +1,6 @@
 {
   "name": "docker-delta",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Generate binary filesystem diffs between docker images to speed up distribution",
   "main": "out/docker-delta",
   "scripts": {
@@ -33,6 +33,6 @@
     "typed-error": "^3.2.2"
   },
   "versionist": {
-    "publishedAt": "2024-07-05T16:16:07.253Z"
+    "publishedAt": "2025-10-07T13:27:01.502Z"
   }
 }

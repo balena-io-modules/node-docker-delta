@@ -1,14 +1,152 @@
 - commits:
+    - subject: Update dependencies
+      hash: 32caaf065c311641ef73f87aa376544750948473
+      body: |
+        Update docker-toolbelt from 6.0.2 to 6.0.13
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested:
+        - commits:
+            - subject: Update actions/checkout digest to 08eba0b
+              hash: b9dadfd22fa93116029cf202f26ae7c01ebcb2d6
+              body: |
+                Update actions/checkout
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.13
+          title: ""
+          date: 2025-10-06T17:00:02.813Z
+        - commits:
+            - subject: Update dependencies
+              hash: 13b9d72f6d2b519a11f133094a3735c537c1d0b6
+              body: ""
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: Pagan Gazzard
+          version: docker-toolbelt-6.0.12
+          title: ""
+          date: 2025-10-06T16:52:47.374Z
+        - commits:
+            - subject: Update actions/setup-node digest to 49933ea
+              hash: 8f194b668a020fef896c13ec2378fcc54e78dddf
+              body: |
+                Update actions/setup-node
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.11
+          title: ""
+          date: 2025-04-16T15:58:16.885Z
+        - commits:
+            - subject: Update dependency typedoc to ^0.28.0
+              hash: 35c794774cc29e5c69a487a1112a1c31debad64a
+              body: |
+                Update typedoc from 0.25.13 to 0.28.2
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.10
+          title: ""
+          date: 2025-04-11T16:16:42.949Z
+        - commits:
+            - subject: Update peaceiris/actions-gh-pages action to v4
+              hash: 6538fc6787b038ed79a80512b27f2655f21500cb
+              body: |
+                Update peaceiris/actions-gh-pages from 3 to 4
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.9
+          title: ""
+          date: 2025-04-10T15:25:13.216Z
+        - commits:
+            - subject: Update dependency rimraf to v6
+              hash: 77916ac11bd7d65ea211404ae0d9336786df78ff
+              body: |
+                Update rimraf from 5.0.10 to 6.0.1
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.8
+          title: ""
+          date: 2025-04-10T13:49:29.409Z
+        - commits:
+            - subject: Update dependency balena-semver to v3
+              hash: f0d15dfe2745046a445e1e9b2802dcbc2557de96
+              body: |
+                Update balena-semver from 2.3.5 to 3.0.2
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.7
+          title: ""
+          date: 2025-04-10T11:43:25.833Z
+        - commits:
+            - subject: Update dependency mocha to v11
+              hash: e55a7e5a1267edb6035cf8dc12603ab6964328b9
+              body: |
+                Update mocha from 10.8.2 to 11.1.0
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.6
+          title: ""
+          date: 2025-04-02T15:10:00.632Z
+        - commits:
+            - subject: Update actions/setup-node action to v4
+              hash: 6f803301aecffc277b55febc8bce6f4c847b3f9f
+              body: |
+                Update actions/setup-node from 3 to 4
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.5
+          title: ""
+          date: 2025-03-25T17:22:00.426Z
+        - commits:
+            - subject: Pin dependencies
+              hash: 3da6898c9279eb301a5966838f1de20b3a3f95c3
+              body: |
+                Update actions/checkout
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: balena-renovate[bot]
+          version: docker-toolbelt-6.0.4
+          title: ""
+          date: 2025-03-19T16:00:12.876Z
+        - commits:
+            - subject: "CI: Update checkout settings"
+              hash: f33a331071d80e4408c07740037d154419eb9900
+              body: ""
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: Pagan Gazzard
+          version: docker-toolbelt-6.0.3
+          title: ""
+          date: 2024-09-27T12:15:26.506Z
+  version: 4.1.1
+  title: ""
+  date: 2025-10-07T13:27:00.729Z
+- commits:
     - subject: Export OutOfSyncError
       hash: 90e267a3c74f3122821cc6d4fa056019e0a3339e
-      body: >
-        The export was lost during the [migration from CoffeeScript to
-        JavaScript](https://github.com/balena-io-modules/node-docker-delta/commit/9600706c47334a800636a97dc5e367e57f46d637#diff-c440d0187a0693cb8ff06e40fa4d7f3df979918586c0948cfef38594237ff533L22)
-
-        but the supervisor has been [assuming the export is
-        available](https://github.com/balena-os/balena-supervisor/blob/master/src/lib/docker-utils.ts#L235)
-        since then. This is required to fix v2 delta support in
-        balena-os/balena-supervisor#2350
+      body: |
+        The export was lost during the [migration from CoffeeScript to JavaScript](https://github.com/balena-io-modules/node-docker-delta/commit/9600706c47334a800636a97dc5e367e57f46d637#diff-c440d0187a0693cb8ff06e40fa4d7f3df979918586c0948cfef38594237ff533L22)
+        but the supervisor has been [assuming the export is available](https://github.com/balena-os/balena-supervisor/blob/master/src/lib/docker-utils.ts#L235) since then. This is required to fix v2 delta support in balena-os/balena-supervisor#2350
       footer:
         Change-type: minor
         change-type: minor
