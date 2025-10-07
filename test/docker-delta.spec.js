@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { describe, before, it } = require('mocha');
 const chai = require('chai');
 
 chai.use(require('chai-events'));
 chai.use(require('chai-stream'));
 
-const es = require('event-stream');
 const JSONStream = require('JSONStream');
 const stream = require('node:stream');
 const Dockerode = require('dockerode');
@@ -30,12 +29,16 @@ async function buildImg(name, dockerfile) {
 	await stream.promises.pipeline(
 		res,
 		JSONStream.parse(),
-		es.through(function (data) {
-			if (data.error) {
-				this.emit('error', data.error);
-			} else {
-				console.log(data);
-			}
+		new stream.Transform({
+			objectMode: true,
+			transform(data, _enc, cb) {
+				if (data.error) {
+					cb(data.error);
+				} else {
+					console.log(data);
+					cb();
+				}
+			},
 		}),
 	);
 }

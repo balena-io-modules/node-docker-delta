@@ -19,7 +19,6 @@
     "chai": "^4.5.0",
     "chai-events": "0.0.3",
     "chai-stream": "0.0.0",
-    "event-stream": "3.3.5",
     "husky": "^9.1.7",
     "JSONStream": "^1.3.5",
     "lint-staged": "^16.2.3",
