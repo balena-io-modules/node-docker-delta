@@ -1,4 +1,104 @@
 - commits:
+    - subject: Remove bluebird dependency
+      hash: e715af4171ef9490673ec1aa15b4320dc2a19a50
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+      nested: []
+    - subject: Update docker-toolbelt to 7.x, dropping support for docker < 1.10
+        (released Feb 2016)
+      hash: 4badf52ea783adc1c364b39487eacfb74390c258
+      body: |
+        Update docker-toolbelt from 6.0.13 to 7.0.0
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+      nested:
+        - commits:
+            - subject: Update @types/dockerode to 4.x
+              hash: 5c5cbbdd68b236e0da5c0ed9229c532eb52c7bd6
+              body: ""
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: Pagan Gazzard
+            - subject: Switch to ESM
+              hash: 67961cf8f843088fd5d76d90f392e6077ab001cf
+              body: ""
+              footer:
+                Change-type: major
+                change-type: major
+              author: Pagan Gazzard
+            - subject: Update tsconfig target to es2024
+              hash: 82d9beb70a699a9149ea493d29b947667e58e2fc
+              body: ""
+              footer:
+                Change-type: major
+                change-type: major
+              author: Pagan Gazzard
+            - subject: Update minimum supported nodejs version to ^22.22.0 || >=24.13.0
+              hash: e4c62117fed82d4e413809feb72d682cd4c41670
+              body: ""
+              footer:
+                Change-type: major
+                change-type: major
+              author: Pagan Gazzard
+            - subject: Drop support for docker < 1.10 (released Feb 2016)
+              hash: 634fef0fb1f0e47ab46581720b6a2f9f2fb16280
+              body: >
+                This allows us to drop the balena-semver dependency and avoid
+                calls to
+
+                `docker.version()`
+              footer:
+                Change-type: major
+                change-type: major
+              author: Pagan Gazzard
+          version: docker-toolbelt-7.0.0
+          title: ""
+          date: 2026-02-02T19:11:04.201Z
+        - commits:
+            - subject: Remove `event-stream` in favor of built-in alternatives
+              hash: 4019e32bff14c71675d1777c3fff69b31d37f7b8
+              body: ""
+              footer:
+                Change-type: patch
+                change-type: patch
+              author: Pagan Gazzard
+          version: docker-toolbelt-6.0.14
+          title: ""
+          date: 2025-10-07T11:51:49.360Z
+    - subject: Switch to ESM
+      hash: 0572596a9aa7c9a62a441a21597be2ca717b97bd
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+      nested: []
+    - subject: Update tsconfig target to es2024
+      hash: 7c682d3e6be07c4032026e7dcdc2337fa15b5300
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+      nested: []
+    - subject: Update minimum supported nodejs version to ^22.22.0 || >=24.13.0
+      hash: bff24a6660ec538901c773c4111a0b7489e52c2f
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+      nested: []
+  version: 5.0.0
+  title: ""
+  date: 2026-02-04T11:49:03.656Z
+- commits:
     - subject: Update dependencies
       hash: 32caaf065c311641ef73f87aa376544750948473
       body: |
