@@ -1,5 +1,5 @@
 import { describe, before, it } from 'mocha';
-import chai from 'chai';
+import * as chai from 'chai';
 
 import chaiEvents from 'chai-events';
 import chaiStream from 'chai-stream';
