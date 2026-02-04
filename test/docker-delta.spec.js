@@ -1,17 +1,18 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-const { describe, before, it } = require('mocha');
-const chai = require('chai');
+import { describe, before, it } from 'mocha';
+import chai from 'chai';
 
-chai.use(require('chai-events'));
-chai.use(require('chai-stream'));
+import chaiEvents from 'chai-events';
+import chaiStream from 'chai-stream';
+chai.use(chaiEvents);
+chai.use(chaiStream);
 
-const JSONStream = require('JSONStream');
-const stream = require('node:stream');
-const Dockerode = require('dockerode');
+import JSONStream from 'JSONStream';
+import stream from 'node:stream';
+import Dockerode from 'dockerode';
 
 const docker = new Dockerode();
 
-const dockerDelta = require('..');
+import * as dockerDelta from '../out/docker-delta.js';
 
 const { expect } = chai;
 

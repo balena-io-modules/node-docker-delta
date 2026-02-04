@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
+		"module": "Node20",
 		"strict": true,
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,

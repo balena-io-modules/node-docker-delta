@@ -2,9 +2,9 @@ import path from 'node:path';
 import Bluebird from 'bluebird';
 import stream from 'node:stream';
 import { TypedError } from 'typed-error';
-import * as rsync from './rsync';
-import * as btrfs from './btrfs';
-import { spawn } from './utils';
+import * as rsync from './rsync.js';
+import * as btrfs from './btrfs.js';
+import { spawn } from './utils.js';
 import type Dockerode from 'dockerode';
 import * as dt from 'docker-toolbelt';
 

@@ -1,4 +1,4 @@
-import { spawn } from './utils';
+import { spawn } from './utils.js';
 
 export const deleteSubvolAsync = function (subvol: string) {
 	return spawn('btrfs', ['subvolume', 'delete', subvol]).waitAsync();
