@@ -17,7 +17,6 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@balena/lint": "^9.3.12",
-    "@types/bluebird": "^3.5.42",
     "@types/dockerode": "^4.0.1",
     "@types/node": "^22.19.8",
     "chai": "^6.2.2",
@@ -30,9 +29,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "bluebird": "^3.7.2",
     "docker-toolbelt": "^7.0.0",
     "dockerode": "^4.0.9",
+    "p-timeout": "^7.0.1",
     "tmp-promise": "^3.0.3",
     "typed-error": "^3.2.2"
   },
