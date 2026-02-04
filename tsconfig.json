@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "Node16",
+		"module": "Node20",
 		"strict": true,
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,
@@ -9,7 +9,7 @@
 		"removeComments": true,
 		"rootDir": "lib",
 		"sourceMap": true,
-		"target": "es2022",
+		"target": "es2024",
 		"declaration": true,
 		"skipLibCheck": true,
 		"resolveJsonModule": true,
