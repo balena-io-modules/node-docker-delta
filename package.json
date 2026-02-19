@@ -22,7 +22,7 @@
   "devDependencies": {
     "@balena/lint": "^9.3.12",
     "@types/dockerode": "^4.0.1",
-    "@types/node": "^22.19.8",
+    "@types/node": "^24.0.0",
     "chai": "^6.2.2",
     "chai-events": "0.0.3",
     "chai-stream": "0.0.0",
