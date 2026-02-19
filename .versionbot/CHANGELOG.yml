@@ -1,4 +1,18 @@
 - commits:
+    - subject: "Add id-token: write permission for NPM OIDC publishing"
+      hash: 514fe8715c76ab669c0fa008f6b1e537d32287f0
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 5.0.1
+  title: ""
+  date: 2026-02-19T21:49:35.376Z
+- commits:
     - subject: Remove bluebird dependency
       hash: e715af4171ef9490673ec1aa15b4320dc2a19a50
       body: ""
