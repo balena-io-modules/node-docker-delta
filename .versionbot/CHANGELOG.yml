@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update product-os/flowzone digest to eb703ea
+      hash: 5dad23ecd03ceb43eb563e1ee253a63f98a0ba6a
+      body: |
+        Update product-os/flowzone
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.3
+  title: ""
+  date: 2026-03-25T20:08:19.356Z
+- commits:
     - subject: Pin product-os/flowzone action to a53cf4b
       hash: e865bb3c3bd274bfe7f35c6aa0c6e7a493db70ac
       body: |
