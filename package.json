@@ -30,7 +30,7 @@
     "JSONStream": "^1.3.5",
     "lint-staged": "^16.2.7",
     "mocha": "^11.7.5",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.0"
   },
   "dependencies": {
     "docker-toolbelt": "^7.0.0",
