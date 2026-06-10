@@ -105,7 +105,7 @@ function parseDeltaStream(input: stream.PassThrough) {
 						reject(new Error('Unknown version: ' + metadata.version));
 					}
 				} catch (error) {
-					reject(error as Error);
+					reject(error instanceof Error ? error : new Error(String(error)));
 				}
 			}
 		};
