@@ -1,4 +1,16 @@
 - commits:
+    - subject: Fix linting error
+      hash: 20428f52d5a8000f617b8e04e0ce2d2304e198d4
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: joshbwlng
+      nested: []
+  version: 5.0.17
+  title: ""
+  date: 2026-06-11T12:20:23.600Z
+- commits:
     - subject: Revert flowzone pinning to master
       hash: 234201160d809e973c00d65fdcb5cebcd7a3a86f
       body: ""
