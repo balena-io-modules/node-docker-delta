@@ -1,6 +1,6 @@
 {
   "name": "docker-delta",
-  "version": "5.0.19",
+  "version": "5.0.20",
   "description": "Generate binary filesystem diffs between docker images to speed up distribution",
   "type": "module",
   "main": "out/docker-delta.js",
@@ -40,6 +40,6 @@
     "typed-error": "^3.2.2"
   },
   "versionist": {
-    "publishedAt": "2026-06-12T00:37:38.810Z"
+    "publishedAt": "2026-06-12T02:07:27.376Z"
   }
 }

@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency typescript to v6
+      hash: 77e4612ac60bc80c77515d3c504a90ebc4a33281
+      body: |
+        Update typescript from 5.9.3 to 6.0.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.20
+  title: ""
+  date: 2026-06-12T02:07:27.292Z
+- commits:
     - subject: Update dependency lint-staged to v17
       hash: fd33cff3382e9659971e0492c05c54122ee76b7f
       body: |
