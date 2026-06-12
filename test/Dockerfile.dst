@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4
 # Change a few characters but ensure file length remains the same
 RUN echo "HeXXo from the image" > testfile
 # Force date modified to a known fixed value
