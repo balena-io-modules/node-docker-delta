@@ -1,4 +1,17 @@
 - commits:
+    - subject: Pin dependencies
+      hash: 39ae0611d4da7e40e5006b270e18d49ae1acfa0f
+      body: |
+        Update @types/dockerode
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.21
+  title: ""
+  date: 2026-06-12T02:47:37.994Z
+- commits:
     - subject: Update dependency typescript to v6
       hash: 77e4612ac60bc80c77515d3c504a90ebc4a33281
       body: |
