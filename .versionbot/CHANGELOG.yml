@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency lint-staged to v17
+      hash: fd33cff3382e9659971e0492c05c54122ee76b7f
+      body: |
+        Update lint-staged from 16.4.0 to 17.0.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.19
+  title: ""
+  date: 2026-06-12T00:37:38.699Z
+- commits:
     - subject: Rename .lintstagedrc to .lintstagedrc.json
       hash: f877ceac5170ce0e35f657dd60c36a49c35a034f
       body: |
