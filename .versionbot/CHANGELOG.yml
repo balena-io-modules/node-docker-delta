@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update alpine Docker digest to 28bd5fe
+      hash: 117372b6c52cf57f0d0203c829a76f6ad47fb40b
+      body: |
+        Update alpine
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.22
+  title: ""
+  date: 2026-06-18T06:30:43.616Z
+- commits:
     - subject: Pin dependencies
       hash: 39ae0611d4da7e40e5006b270e18d49ae1acfa0f
       body: |
