@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency lint-staged to v17.0.8
+      hash: 93738a6d5035c600c489a95873969550f943f87d
+      body: |
+        Update lint-staged from 17.0.7 to 17.0.8
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.23
+  title: ""
+  date: 2026-07-20T06:04:03.104Z
+- commits:
     - subject: Update alpine Docker digest to 28bd5fe
       hash: 117372b6c52cf57f0d0203c829a76f6ad47fb40b
       body: |
