@@ -1,4 +1,20 @@
 - commits:
+    - subject: Move dockerode to a peer dependency and mark 5.x as supported
+      hash: adaa05a983227084868f8229b43cf85e3662a985
+      body: |
+        We only use dockerode for typings so we don't actually need (nor want)
+        to install it directly ourselves, and instead we want the user to
+        provide a dockerode instance and it just needs to match the
+        typings/versions we expect
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+  version: 5.0.28
+  title: ""
+  date: 2026-10-22T23:39:01.810Z
+- commits:
     - subject: Update dependency mocha to v11.8.0
       hash: 9f9882dd1e9d3c6c4bfc2687f2285490a42536a1
       body: |
