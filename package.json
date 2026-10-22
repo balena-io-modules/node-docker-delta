@@ -21,7 +21,6 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@balena/lint": "^9.3.12",
-    "@types/dockerode": "4.0.1",
     "@types/node": "22.20.1",
     "chai": "6.2.2",
     "chai-events": "0.0.3",
@@ -33,11 +32,14 @@
     "typescript": "6.0.3"
   },
   "dependencies": {
+    "@types/dockerode": "^4.0.1",
     "docker-toolbelt": "^7.0.0",
-    "dockerode": "^4.0.9",
     "p-timeout": "^7.0.1",
     "tmp-promise": "^3.0.3",
     "typed-error": "^3.2.2"
+  },
+  "peerDependencies": {
+    "dockerode": "^4.0.9 || ^5.0.0"
   },
   "versionist": {
     "publishedAt": "2026-09-12T02:07:06.344Z"
