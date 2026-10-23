@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency p-timeout to v8
+      hash: 7f9ed989e5617e90a2bbf837d05df4975aef7449
+      body: |
+        Update p-timeout from 7.0.2 to 8.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.30
+  title: ""
+  date: 2026-10-23T01:30:33.608Z
+- commits:
     - subject: Update alpine Docker digest to 71e9b7b
       hash: 2e27d0c59880b0d0c202f2f270489fdf6bc3b75f
       body: |
