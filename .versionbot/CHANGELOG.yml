@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update alpine Docker digest to 71e9b7b
+      hash: 2e27d0c59880b0d0c202f2f270489fdf6bc3b75f
+      body: |
+        Update alpine
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.29
+  title: ""
+  date: 2026-10-23T00:07:57.751Z
+- commits:
     - subject: Move dockerode to a peer dependency and mark 5.x as supported
       hash: adaa05a983227084868f8229b43cf85e3662a985
       body: |
