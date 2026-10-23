@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update alpine Docker digest to be26560
+      hash: 54a5c2772a3e4c384b12e5ccaeb1e43264344dd5
+      body: |
+        Update alpine
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.36
+  title: ""
+  date: 2026-10-23T07:16:28.583Z
+- commits:
     - subject: Update dependency chai to v6.3.0
       hash: 70e984f01ede1b08f469a5d318c9ef40524e1575
       body: |
