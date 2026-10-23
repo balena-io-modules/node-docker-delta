@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency @types/node to v22.20.5
+      hash: b6422ce9438c5a7a0c53bb32d405338a488d4de2
+      body: |
+        Update @types/node from 22.20.1 to 22.20.5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.31
+  title: ""
+  date: 2026-10-23T02:12:20.400Z
+- commits:
     - subject: Update dependency p-timeout to v8
       hash: 7f9ed989e5617e90a2bbf837d05df4975aef7449
       body: |
