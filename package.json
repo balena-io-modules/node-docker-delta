@@ -34,7 +34,7 @@
   "dependencies": {
     "@types/dockerode": "^4.0.1",
     "docker-toolbelt": "^7.0.0",
-    "p-timeout": "^7.0.1",
+    "p-timeout": "^8.0.0",
     "tmp-promise": "^3.0.3",
     "typed-error": "^3.2.2"
   },
