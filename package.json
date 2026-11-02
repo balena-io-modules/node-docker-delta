@@ -20,7 +20,7 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@balena/lint": "^9.3.12",
+    "@balena/lint": "^11.0.0",
     "@types/node": "22.20.5",
     "chai": "6.3.0",
     "chai-events": "0.0.3",
