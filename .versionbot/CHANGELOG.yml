@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency @balena/lint to v11
+      hash: 407b88059600cc58b628fd4bf1e796c3404a0c79
+      body: |
+        Update @balena/lint from 9.4.15 to 11.0.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.37
+  title: ""
+  date: 2026-11-02T23:18:45.671Z
+- commits:
     - subject: Update alpine Docker digest to be26560
       hash: 54a5c2772a3e4c384b12e5ccaeb1e43264344dd5
       body: |
