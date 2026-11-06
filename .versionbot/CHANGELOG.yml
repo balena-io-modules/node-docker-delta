@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update alpine Docker digest to 3f4d6b3
+      hash: 7eb573290a00f5d0e05ed044365ff46643db6cfd
+      body: |
+        Update alpine
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.39
+  title: ""
+  date: 2026-11-06T00:11:01.660Z
+- commits:
     - subject: Update alpine Docker digest to ce9e1e6
       hash: a8bf3f29015320183007230754722e86e7f05318
       body: |
