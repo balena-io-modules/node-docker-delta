@@ -1,4 +1,17 @@
 - commits:
+    - subject: Update dependency @types/node to v22.20.7
+      hash: 96993bb0670aec36c08f1a78ed857a4d831d5832
+      body: |
+        Update @types/node from 22.20.6 to 22.20.7
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+      nested: []
+  version: 5.0.44
+  title: ""
+  date: 2026-11-28T11:59:52.897Z
+- commits:
     - subject: Update dependency @types/node to v22.20.6
       hash: 078bc0fa380543ecc528d468a5f3cc4554de8873
       body: |
